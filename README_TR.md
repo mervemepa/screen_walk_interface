@@ -1,293 +1,369 @@
-# Desktop Documentary - Gelişmiş Versiyon
+# Desktop Documentary - Kapsamlı Kullanım Kılavuzu
 
-Windows 95 nostaljisiyle modern web teknolojilerini harmanlayan, masaüstünde otomatik görsel kolajlar oluşturan gelişmiş web uygulaması. Kendi medya dosyalarınızı yükleyerek veya demo modunu kullanarak sanatsal dijital kompozisyonlar yaratın.
+Windows 95 nostaljisiyle otomatik görsel kolajlar ve canlı metin performansları oluşturan gelişmiş web uygulaması. Medya koleksiyonunuzu sanatsal masaüstü belgesellerine dönüştürün.
 
 ![Desktop Documentary TR Demo](demo-screenshot-tr.png)
 
-## ✨ Özellikler
+## 🎯 Desktop Documentary Nedir?
 
-### 🎨 Temel Özellikler
+Desktop Documentary, resim ve videolarınızı akıllı basamaklama düzenlerinde otomatik olarak açan pencereler halinde **otomatik görsel performanslar** oluşturur. İdeal kullanım alanları:
 
-- **Otantik Windows 95 Arayüzü**: Retro stil, görev çubuğu, masaüstü simgeleri ve klasik pencere kontrolleri
-- **Akıllı Yerleştirme Sistemi**: Görsel açıdan hoş düzenler oluşturan pozisyonlama algoritması
-- **Sürüklenebilir Pencereler**: Her pencereyi istediğiniz yere taşıyabilme
-- **Karışık Medya Desteği**: Resim (JPG, PNG) ve video (MP4) dosyaları
-- **Gerçek Zamanlı Saat**: Çalışan görev çubuğu saati
+- **Performans Sanatı**: Görsel arka planlarla canlı metin performansları
+- **Dijital Sanat**: Eşsiz masaüstü kompozisyonları yaratma
+- **İçerik Üretimi**: Sanatsal masaüstü deneyimlerini kaydetme
+- **Nostalji Projeleri**: Klasik Windows 95 bilgisayar deneyimi
 
-### 🔧 Gelişmiş Özellikler
+---
 
-- **Dosya Yükleme**: Bilgisayarınızdan çoklu dosya seçimi
-- **Sürükle-Bırak**: Masaüstüne dosyaları doğrudan bırakma
-- **Demo Modu**: Hızlıca test etmek için örnek görseller
-- **Oynatma Listesi**: Medya sıralamasını değiştirme
-- **Zamanlama Kontrolü**: Pencere açılma sürelerini ayarlama
-- **Maksimum Pencere Sınırı**: Açık pencere sayısını kontrol etme
-- **Rastgele Tohum**: Tekrarlanabilir düzenler için
-- **Ekran Kaydı**: Desktop documentary'nizi kaydetme
-- **Yerel Depolama**: Medya listesini tarayıcıda saklama
+## ✨ Tüm Özellikler
 
-## 🚀 Hızlı Başlangıç
+### 🖼️ **Medya Yönetimi**
 
-1. **`index_test.html`** dosyasını modern bir web tarayıcısında açın
-2. **"📥 Medya Ekle"** ile kendi dosyalarınızı yükleyin veya **"✨ Demo"** butonunu tıklayın
-3. İsteğe bağlı ayarları yapın (süre, maksimum pencere, rastgele tohum)
-4. **"▶ Başlat"** ile desktop documentary'nizi başlatın
-5. **"⏺ Kayıt"** ile deneyimi kaydedin
+- **Dosya Yükleme**: Çoklu resim (JPG, PNG, GIF, WebP) ve video (MP4, WebM, MOV) seçimi
+- **Sürükle-Bırak**: Dosyaları doğrudan masaüstüne bırakma
+- **Demo Modu**: Picsum'dan 5 örnek görselle hızlı başlangıç
+- **Dinamik Oynatma Listesi**: Kaydırma desteği olan yeniden boyutlandırılabilir medya listesi
+- **Tekli Silme**: Çöp kutusu simgesi (🗑️) ile öğeleri kaldırma
+- **Sürükle Yeniden Sıralama**: Öğeleri sürükleyerek oynatma listesini düzenleme
 
-## 🎮 Kontroller
+### 🎮 **Oynatma Kontrolleri**
 
-### Ana Butonlar
+- **Akıllı Zamanlama**: Pencereler arası ayarlanabilir gecikmeler (1-8 saniye)
+- **Pencere Sınırları**: Maksimum açık pencere kontrolü (3-20)
+- **Tohum Rastgele**: Özel tohumlarla tekrarlanabilir düzenler
+- **Otomatik Döngü**: Uzun performanslar için sürekli oynatma
+- **Manuel Kontroller**: Başlat, Reset ve bireysel pencere yönetimi
 
-- **📥 Medya Ekle**: Bilgisayarınızdan dosya seçme
-- **✨ Demo**: 5 örnek görsel yükleme
-- **▶ Başlat**: Otomatik pencere açma sekansını başlatma
-- **🔄 Reset**: Tüm pencereleri kapatma ve sıfırlama
-- **⏺ Kayıt**: Ekran kaydını başlatma/durdurma
+### 📝 **Metin Performansı**
 
-### Ayarlar
+- **Canlı Metin Penceresi**: Gerçek zamanlı yazmak için yeniden boyutlandırılabilir not defteri stili pencere
+- **Performans Hazır**: Multimedya sanatı için kayıtlar sırasında yazma
+- **Klavye Kısayolları**: `Ctrl+T` aç/kapat, `Ctrl+Shift+C` metni temizle
+- **Klasik Stil**: Otantik Windows 95 not defteri görünümü
+- **Sürüklenebilir**: Metin penceresini ekranın herhangi bir yerine konumlandırma
 
-- **Süre**: Pencereler arası bekleme süresi (1-8 saniye)
-- **Maks Pencere**: Aynı anda açık olabilecek maksimum pencere sayısı (3-20)
-- **Rastgele Tohum**: Tekrarlanabilir düzenler için sayı girişi
+### 🎥 **Kayıt ve Yakalama**
 
-### Pencere Kontrolleri
+- **Dahili Ekran Kaydı**: Tüm performansınızı yakalayın
+- **Yüksek Kalite**: Ses desteği ile WebM formatı
+- **Otomatik İndirme**: Durduğunda kaydı kaydeder
+- **Tarayıcı İzinleri**: Ekran paylaşım isteklerini yönetir
 
-- **Sürükleme**: Pencere başlık çubuğundan sürükleyerek taşıma
-- **\_**: Pencereyi şeffaflaştırma (minimize)
-- **□**: Pencereyi normale döndürme (restore)
-- **×**: Pencereyi kapatma
+### 🖱️ **Pencere Etkileşimi**
 
-## 📁 Dosya Desteği
+- **Sürüklenebilir Pencereler**: Başlık çubuğunu sürükleyerek herhangi bir pencereyi taşıma
+- **Pencere Kontrolleri**: Küçültme (şeffaflık), büyütme ve kapatma
+- **Akıllı Konumlandırma**: Organik varyasyonla akıllı grid tabanlı düzen
+- **Boyut Çeşitliliği**: Rastgele küçük/orta/büyük pencere boyutları
 
-### Desteklenen Formatlar
+### 🔧 **Arayüz Özelleştirme**
 
-- **Resimler**: JPG, JPEG, PNG, GIF, WebP
-- **Videolar**: MP4, WebM, MOV
+- **Yeniden Boyutlandırılabilir Panel**: Kontrol panelini genişletmek için sol kenarı sürükle (200px-500px)
+- **Yeniden Boyutlandırılabilir Oynatma Listesi**: Medya listesini genişletmek için sağ alt köşeyi sürükle (60px-300px)
+- **Kalıcı Ayarlar**: Tercih ettiğiniz panel boyutlarını hatırlar
+- **Duyarlı Tasarım**: Farklı ekran boyutlarına uyum sağlar
 
-### Dosya Ekleme Yöntemleri
+---
 
-1. **Dosya Seçici**: "Medya Ekle" butonu ile klasik seçim
-2. **Sürükle-Bırak**: Dosyaları doğrudan masaüstüne bırakma
-3. **Demo Modu**: Picsum.photos'tan örnek görseller
+## 🚀 Hızlı Başlangıç Kılavuzu
 
-## ⚙️ Gelişmiş Ayarlar
+### **1. İlk Kurulum**
 
-### Zamanlama Sistemi
+1. Modern bir web tarayıcısında `index_test.html` dosyasını açın (Chrome önerilir)
+2. Sağda kontrol paneli olan klasik Windows 95 masaüstünü göreceksiniz
 
-```javascript
-// Her medya öğesi için ayrı süre ayarlama
-const mediaItems = [
-  { name: "görsel1.jpg", type: "image", duration: 3000 }, // 3 saniye
-  { name: "video1.mp4", type: "video", duration: 5000 }, // 5 saniye
-];
+### **2. Medya Ekleme**
+
+**Seçenek A - Dosya Yükleme:**
+
+- **"📥 Medya Ekle"** butonuna tıklayın
+- Bilgisayarınızdan çoklu resim/video seçin
+- Dosyalar aşağıdaki oynatma listesinde görünür
+
+**Seçenek B - Demo Modu:**
+
+- Test ve öğrenme için **"✨ Demo"** butonuna tıklayın
+- 5 örnek görsel yükler
+
+**Seçenek C - Sürükle-Bırak:**
+
+- Dosyaları doğrudan bilgisayarınızdan masaüstüne sürükleyin
+- Çoklu dosya desteklenir
+
+### **3. Ayarları Yapılandırma**
+
+- **Süre**: Pencere açılışları arasındaki zamanı ayarlayın
+- **Maks Pencere**: Maksimum eşzamanlı pencere sayısını belirleyin
+- **Rastgele Tohum**: Tutarlı düzenler için sayı girin (rastgele için boş bırakın)
+
+### **4. Belgeselinizi Başlatın**
+
+- Otomatik sekansı başlatmak için **"▶ Başlat"** butonuna tıklayın
+- Pencereler zamanlı aralıklarla medyanızla açılacak
+- **Otomatik Döngü**: Tüm medya oynatıldığında baştan başlar
+
+### **5. Canlı Metin Performansı Ekleyin** _(İsteğe bağlı)_
+
+- Metin performans penceresini açmak için **"📝 Text"** butonuna tıklayın
+- Multimedya performansları için oynatma sırasında canlı yazın
+- Metin penceresini gerektiği gibi yeniden boyutlandırın ve konumlandırın
+
+### **6. Performansınızı Kaydedin** _(İsteğe bağlı)_
+
+- Ekran kaydını başlatmak için **"⏺ Kayıt"** butonuna tıklayın
+- İstendiğinde ekran paylaşım iznini verin
+- Durdurmak ve kaydı indirmek için tekrar tıklayın
+
+### **7. Etkileşimli Kontroller**
+
+- **Pencereleri Sürükle**: Yeniden konumlandırmak için herhangi bir pencere başlık çubuğuna tıklayıp sürükleyin
+- **Pencere Kontrolleri**: Pencere köşelerindeki `_`, `□`, `×` butonlarını kullanın
+- **Reset**: Tüm pencereleri kapatmak ve durdurmak için **"🔄 Reset"** butonuna tıklayın
+
+---
+
+## 🎨 Gelişmiş Kullanım
+
+### **Tekrarlanabilir Düzenler Oluşturma**
+
+```
+1. Medya dosyalarınızı yükleyin
+2. "Rastgele Tohum"a bir sayı girin (örn: 12345)
+3. Belgeseli başlatın
+4. Aynı tohum = her seferinde aynı düzen
 ```
 
-### Rastgele Tohum Kullanımı
+### **Performans Sanatı Kurulumu**
 
-- Boş bırakın: Her seferinde farklı düzen
-- Sayı girin: Aynı tohum ile aynı düzen
-
-### Pencere Boyutları
-
-Sistem otomatik olarak 3 boyut sınıfı atar:
-
-- **Small**: Maksimum 300px genişlik
-- **Medium**: Maksimum 400px genişlik
-- **Large**: Maksimum 500px genişlik
-
-## 🎨 Özelleştirme
-
-### CSS Değişkenleri
-
-```css
-:root {
-  --teal: #008080; /* Ana arka plan rengi */
-  --deep: #004444; /* Koyu arka plan tonu */
-  --bar: #c0c0c0; /* Görev çubuğu rengi */
-  --title1: #000080; /* Pencere başlık rengi 1 */
-  --title2: #0000ff; /* Pencere başlık rengi 2 */
-}
+```
+1. Sanatsal resim/videolar yükleyin
+2. Metin penceresini açın (📝 Text butonu)
+3. Görünürlük için metin penceresini konumlandırın
+4. Kaydı başlatın (⏺ Kayıt)
+5. Belgeseli başlatın (▶ Başlat)
+6. Oynatma sırasında canlı metin yazın
+7. Tamamlandığında kaydı durdurun
 ```
 
-### Akıllı Yerleştirme Algoritması
+### **Uzun Performans Oturumları**
 
-```javascript
-function generateSmartPosition(index, total) {
-  // Grid tabanlı sistem + organik varyasyon
-  const cols = Math.ceil(Math.sqrt(total * 1.5));
-  // Rastgele pozisyon hesaplama
-  // Ekran sınırları kontrolü
-}
+```
+1. Daha yüksek "Maks Pencere" ayarlayın (15-20)
+2. Daha kısa "Süre" aralıkları kullanın (1-2 saniye)
+3. Belgesel otomatik olarak döngüye girecek
+4. Metin penceresi sürekli performans için açık kalır
 ```
 
-## 🖥️ Tarayıcı Uyumluluğu
+### **Dosya Başına Özel Zamanlama**
 
-### Tam Destek
+- Her dosya türünün varsayılan zamanlaması vardır (resimler: 3s, videolar: 4s)
+- Gerekirse oynatma listesinde zamanlamayı değiştirin
+- Videolar zamanlama ayarına bakılmaksızın tam uzunluklarını oynatır
 
-- **Chrome/Edge**: Tüm özellikler + ekran kaydı
-- **Firefox**: Tüm özellikler + ekran kaydı
-- **Safari**: Temel özellikler (ekran kaydı sınırlı)
+---
 
-### Gerekli API'ler
+## 🔧 Teknik Detaylar
 
-- File API (dosya yükleme)
-- Drag & Drop API (sürükle-bırak)
-- MediaRecorder API (ekran kaydı)
-- Display Media API (ekran yakalama)
-- Local Storage API (veri saklama)
+### **Tarayıcı Gereksinimleri**
 
-## 📱 Responsive Tasarım
+- **Önerilen**: Chrome/Edge (tam özellik desteği)
+- **Uyumlu**: Firefox (tam destek)
+- **Sınırlı**: Safari (temel özellikler, kayıt çalışmayabilir)
 
-- **Desktop**: Tam özellik desteği
-- **Tablet**: Temel özellikler (sürükleme sınırlı)
-- **Mobil**: Görüntüleme modu (etkileşim sınırlı)
+### **Gerekli Tarayıcı Özellikleri**
 
-## 🎯 Kullanım Senaryoları
+- File API (yüklemeler için)
+- Drag & Drop API
+- MediaRecorder API (ekran kaydı için)
+- Display Media API (ekran yakalama için)
+- Local Storage (ayarlar için)
 
-### Sanat & Tasarım
+### **Dosya Format Desteği**
 
-- Dijital kolaj oluşturma
-- Görsel kompozisyon deneyimleri
-- Rastgele sanat üretimi
+- **Resimler**: JPG, JPEG, PNG, GIF, WebP (her biri 100MB'a kadar)
+- **Videolar**: MP4, WebM, MOV (her biri 100MB'a kadar)
 
-### Eğitim & Sunum
+### **Performans İpuçları**
 
-- Retro bilgisayar deneyimi gösterimi
-- Nostalji projeleri
-- İnteraktif sunumlar
+- **Optimal dosya sayısı**: 5-20 medya dosyası
+- **Önerilen dosya boyutu**: Pürüzsüz performans için her biri 10MB'ın altında
+- **Tarayıcı belleği**: Kayıt sırasında diğer sekmeleri kapatın
+- **Kayıt kalitesi**: En iyi sonuçlar için tam ekran modu kullanın
 
-### İçerik Üretimi
+---
 
-- Sosyal medya videoları
-- Sanatsal kayıtlar
-- Desktop documentary'ler
+## 🎮 Klavye Kısayolları
 
-### Kurulum & Sergi
+| Kısayol        | Eylem                                               |
+| -------------- | --------------------------------------------------- |
+| `Ctrl+T`       | Metin performans penceresini aç/kapat               |
+| `Ctrl+Shift+C` | Metni temizle (metin penceresi odaklandığında)      |
+| `Sürükle`      | Pencereleri taşı veya panelleri yeniden boyutlandır |
+| `Bırak`        | Masaüstüne dosya ekle                               |
 
-- Galeriler için interaktif kurulumlar
-- Müze sergileri
-- Dijital sanat enstalasyonları
+---
 
-## 🔧 Sorun Giderme
+## 🔍 Sorun Giderme
 
-### Pencereler Açılmıyor
+### **Medya Yüklenmiyor**
 
-- Medya dosyalarının yüklendiğini kontrol edin
-- Tarayıcı konsolunu açıp hata mesajlarını kontrol edin
-- Dosya formatlarının desteklendiğinden emin olun
+- Dosya formatlarının desteklendiğini kontrol edin
+- Dosyaların 100MB'ın altında olduğundan emin olun
+- Tarayıcıyı yenilemeyi deneyin
+- Hatalar için tarayıcı konsolunu kontrol edin
 
-### Kayıt Çalışmıyor
+### **Pencereler Açılmıyor**
 
-- HTTPS bağlantısı gerekli (yerel dosyalar için sorun olmaz)
-- Ekran paylaşım iznini verin
-- Chrome tarayıcısı önerilir
-- Diğer sekmeleri kapatarak bellek boşaltın
+- Oynatma listesinde medya öğeleri olduğunu doğrulayın
+- JavaScript hataları için tarayıcı konsolunu kontrol edin
+- Tarayıcı önbelleğini temizlemeyi deneyin
+- Popup engelleyicilerinin aktif olmadığından emin olun
 
-### Performans Sorunları
+### **Kayıt Sorunları**
 
-- Maksimum pencere sayısını azaltın
-- Büyük video dosyalarını optimize edin
-- Tarayıcı sekmelerini kapatın
-- RAM kullanımını kontrol edin
+- **Chrome/Firefox**: Tam olarak çalışmalı
+- **Safari**: Sınırlamaları olabilir
+- **İzinler**: İstendiğinde ekran paylaşım iznini verin
+- **HTTPS**: Bazı tarayıcılar güvenli bağlantı gerektirir
+- **Performans**: Gereksiz tarayıcı sekmelerini kapatın
 
-### Dosya Yükleme Sorunları
+### **Performans Sorunları**
 
-- Dosya boyutunu kontrol edin (>100MB problemli olabilir)
-- Desteklenen formatları kullanın
-- Tarayıcıyı yeniden başlatın
+- "Maks Pencere" ayarını azaltın
+- Daha küçük resim dosyaları kullanın
+- Diğer uygulamaları kapatın
+- Gizli/özel gezinme modunu deneyin
 
-## 💾 Veri Yönetimi
+### **Panel/Pencere Sorunları**
 
-### Yerel Depolama
+- **Yeniden boyutlandırma çalışmıyor**: Tam kenarlardan sürüklemeyi deneyin
+- **Pencereler takıldı**: Reset butonunu kullanın
+- **Metin penceresi eksik**: 📝 Text butonuna tekrar tıklayın
 
-- Medya listesi tarayıcıda saklanır
-- Blob URL'ler oturum bazlıdır
-- Temizlemek için: `localStorage.clear()`
+---
 
-### Dosya Güvenliği
+## 🎯 Yaratıcı Fikirler ve Kullanım Durumları
+
+### **Sanat Projeleri**
+
+- **Hafıza Kolajları**: Kişisel fotoğrafları bilinç akışı metniyle kullanın
+- **Şiir Performansları**: Resimler basamaklandığı sırada canlı şiir yazın
+- **Görsel Anlatılar**: Resim dizileri ve canlı metinle hikayeler anlatın
+- **Soyut Kompozisyonlar**: Beklenmedik düzenler için rastgele tohumlar kullanın
+
+### **Eğitim Kullanımları**
+
+- **Dijital Okuryazarlık**: Erken bilgisayar arayüzlerinin nasıl çalıştığını gösterin
+- **Sanat Tarihi**: Masaüstü estetik hareketlerini yeniden yaratın
+- **Medya Çalışmaları**: Metin ve görüntü arasındaki ilişkiyi keşfedin
+
+### **Performans Sanatı**
+
+- **Canlı Yayın**: Twitch/YouTube yaratıcı yayınları için kullanın
+- **Galeri Kurulumları**: Kamu etkileşimi için büyük ekranlarda kurun
+- **Atölye Etkinlikleri**: İşbirlikçi hikaye anlatım oturumları
+- **Dijital Tiyatro**: Masaüstü tabanlı performanslar yaratın
+
+### **Kişisel Projeler**
+
+- **Hafıza Belgelendirme**: Canlı yorumlarla aile fotoğrafları
+- **Yaratıcı Günlük Tutma**: Günlük görsel ve metin girişleri
+- **Ruh Hali Panoları**: Zamanla gelişen dinamik koleksiyonlar
+- **Dijital Albüm Yapımı**: Etkileşimli hafıza koruma
+
+---
+
+## 💾 Veri ve Gizlilik
+
+### **Sadece Yerel Depolama**
+
+- Tüm dosyalar yerel olarak tarayıcıda işlenir
+- Sunuculara yükleme yapılmaz
+- Tam gizlilik koruması
+- Tarayıcı önbelleği temizlendiğinde veriler silinir
+
+### **Dosya Güvenliği**
 
 - Dosyalar sadece tarayıcı belleğinde
 - Sunucuya yükleme yapılmaz
 - Gizlilik odaklı tasarım
-
-## 🚀 Gelişmiş Kullanım
-
-### Toplu İşlemler
-
-```javascript
-// Çoklu dosya yükleme
-document.getElementById("filePicker").multiple = true;
-
-// Programatik başlatma
-start();
-
-// Medya listesi manipülasyonu
-mediaItems.push({ name: "yeni.jpg", type: "image", url: blobUrl });
-```
-
-### Özel Entegrasyon
-
-```javascript
-// API'dan medya yükleme
-async function loadFromAPI(urls) {
-  for (const url of urls) {
-    mediaItems.push({ name: getFileName(url), type: "image", url });
-  }
-  renderPlaylist();
-}
-```
-
-## 🤝 Katkıda Bulunma
-
-Geliştirme fikirleri:
-
-- [ ] Daha fazla dosya formatı desteği
-- [ ] Ses efektleri ve müzik
-- [ ] Tema sistemi (Mac OS, Linux vb.)
-- [ ] Bulut depolama entegrasyonu
-- [ ] Sosyal medya paylaşımı
-- [ ] AI destekli otomatik kolaj
-- [ ] WebGL animasyonları
-- [ ] Multi-monitor desteği
-
-## 📊 Teknik Detaylar
-
-### Mimari
-
-- Vanilla JavaScript (framework yok)
-- CSS Grid & Flexbox layout
-- Modern Web APIs
-- Event-driven architecture
-
-### Performans
-
-- Lazy loading için Intersection Observer
-- Memory management için Object URLs
-- 60fps animasyonlar
-- Optimize edilmiş DOM manipülasyonu
-
-### Güvenlik
-
-- XSS koruması
-- Safe file handling
-- No server communication
-- Privacy-first approach
-
-## 📄 Lisans
-
-Bu proje açık kaynak kodludur. İstediğiniz gibi kullanabilir, değiştirebilir ve dağıtabilirsiniz.
-
-## 🙏 Teşekkürler
-
-- Windows 95 tasarım ilhamı için Microsoft
-- Demo görseller için Picsum.photos
-- Modern web teknolojileri için W3C
-- Açık kaynak topluluğu
+- Kayıt dosyaları kullanıcının bilgisayarına indirilir
 
 ---
 
-**Desktop Documentary TR** - Retro bilgisayar estetiğini modern web deneyimine taşıyan gelişmiş uygulama.
+## 🔄 Sürüm Geçmişi ve Güncellemeler
 
-### Son Güncelleme: Ekim 2025
+### **Güncel Sürüm: 2.0**
 
-### Versiyon: 2.0 (Gelişmiş Türkçe Sürüm)
+- ✅ Dosya yükleme sistemi
+- ✅ Metin performans penceresi
+- ✅ Otomatik döngü
+- ✅ Yeniden boyutlandırılabilir arayüz
+- ✅ Bireysel silme butonları
+- ✅ Sürükle-bırak yeniden sıralama
+- ✅ Ekran kaydı
+- ✅ Akıllı konumlandırma algoritması
+
+### **Gelecek Geliştirmeler** _(Fikirler)_
+
+- Çoklu masaüstü temaları (Mac OS Classic, vb.)
+- Ses efektleri ve arka plan müziği
+- Konfigürasyon dışa aktarımı
+- İşbirlikçi oturumlar
+- Mobil dokunma desteği
+- WebGL efektleri
+- AI üretimli içerik entegrasyonu
+
+---
+
+## 🤝 Destek ve Topluluk
+
+### **Yardım Alma**
+
+- Yaygın sorunlar için bu README'yi kontrol edin
+- Konsol hatalarını kontrol etmek için tarayıcı geliştirici araçlarını kullanın
+- Sorunlar devam ederse farklı tarayıcılar deneyin
+- Önce demo moduyla test edin
+
+### **Fikir Katkısı**
+
+- Performans sanatı teknikleri
+- Yaratıcı kullanım durumları
+- Teknik iyileştirmeler
+- Arayüz geliştirmeleri
+- Yeni özellik önerileri
+
+---
+
+## 📄 Teknik Uygulama
+
+### **Temel Mimari**
+
+- **Sadece Frontend**: Saf HTML/CSS/JavaScript
+- **Bağımlılık Yok**: Harici kütüphane gerekmez
+- **Modern API'ler**: En son tarayıcı yeteneklerini kullanır
+- **Duyarlı Tasarım**: CSS Grid ve Flexbox
+- **Olay Odaklı**: Temiz endişe ayrımı
+
+### **Dosya Yapısı**
+
+```
+Desktop Documentary/
+├── index_test.html     # Tam uygulama (tek dosya)
+├── README_TR.md        # Bu dokümantasyon
+└── demo-images/        # İsteğe bağlı demo varlıkları
+```
+
+### **Ana Fonksiyonlar**
+
+- `addFiles()` - Dosya yüklemeleri ve sürükle-bırakı işle
+- `start()` - Döngülü belgesel oynatmayı başlat
+- `createWindow()` - Konumlandırılmış medya pencereleri oluştur
+- `toggleTextWindow()` - Metin performans penceresini yönet
+- `toggleRecording()` - Ekran yakalama kaydını işle
+
+---
+
+**Desktop Documentary** - Medyanızı otantik Windows 95 nostaljisiyle etkileşimli görsel performanslara dönüştürün.
+
+_Son Güncelleme: Ekim 2025 | Sürüm 2.0_
