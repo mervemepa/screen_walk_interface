@@ -421,6 +421,71 @@
             margin-top: 6px;
             font-family: 'MS Sans Serif', sans-serif;
         }
+
+        /* Text Performance Window */
+        .text-window {
+            position: absolute;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            min-width: 300px;
+            max-width: 600px;
+            width: 400px;
+            height: 250px;
+            box-shadow: 4px 4px 8px var(--shadow);
+            z-index: 200;
+            resize: both;
+            overflow: hidden;
+        }
+
+        .text-window .window-titlebar {
+            background: linear-gradient(to right, var(--title1) 0%, var(--title2) 100%);
+            height: 18px;
+            display: flex;
+            align-items: center;
+            padding: 2px 4px;
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: move;
+        }
+
+        .text-window .text-content {
+            padding: 8px;
+            background: #fff;
+            border: 1px inset #c0c0c0;
+            margin: 4px;
+            height: calc(100% - 34px);
+            overflow: hidden;
+        }
+
+        .text-window textarea {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            background: #fff;
+            color: #000;
+            resize: none;
+            padding: 4px;
+            line-height: 1.4;
+        }
+
+        /* Text button in controls */
+        .btn.text-btn {
+            background: linear-gradient(to bottom, #f0f0f0 0%, #e0e0e0 100%);
+            border: 1px outset #e0e0e0;
+        }
+
+        .btn.text-btn:active {
+            border: 1px inset #e0e0e0;
+        }
+
+        .btn.text-btn.active {
+            background: linear-gradient(to bottom, #b0c4de 0%, #87ceeb 100%);
+            border: 1px inset #87ceeb;
+        }
     </style>
 </head>
 
@@ -445,6 +510,7 @@
         <div class="row">
             <button class="btn" id="addBtn">📥 Medya Ekle</button>
             <button class="btn" id="demoBtn" title="Örnek 5 görsel yükler">✨ Demo</button>
+            <button class="btn text-btn" id="textBtn" title="Performans için metin kutusu aç">📝 Text</button>
             <input type="file" id="filePicker" accept="image/*,video/*" multiple hidden />
         </div>
 
@@ -846,6 +912,7 @@
         document.getElementById('addBtn').onclick = () => document.getElementById('filePicker').click();
         document.getElementById('filePicker').onchange = (e) => addFiles(e.target.files);
         document.getElementById('demoBtn').onclick = loadDemo;
+        document.getElementById('textBtn').onclick = toggleTextWindow;
         document.getElementById('startBtn').onclick = start;
         document.getElementById('resetBtn').onclick = reset;
         document.getElementById('recBtn').onclick = toggleRecording;
@@ -1071,11 +1138,148 @@
         // Initialize when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
             initializeResizablePanels();
+            initTextFeatures();
             // ...rest of initialization
         });
 
         /* init */
         loadLocal(); renderPlaylist();
+
+        /* ---------- Text Performance Window ---------- */
+        let textWindow = null;
+        let isTextWindowOpen = false;
+
+        function toggleTextWindow() {
+            const btn = document.getElementById('textBtn');
+            
+            if (isTextWindowOpen) {
+                closeTextWindow();
+            } else {
+                openTextWindow();
+            }
+        }
+
+        function openTextWindow() {
+            if (textWindow) return; // Already open
+
+            const desktop = document.getElementById('desktop');
+            textWindow = document.createElement('div');
+            textWindow.className = 'text-window';
+            textWindow.id = 'textPerformanceWindow';
+
+            // Position in center-left area
+            const x = Math.max(50, (window.innerWidth - 400) / 3);
+            const y = Math.max(100, (window.innerHeight - 300) / 3);
+            
+            textWindow.style.left = px(x);
+            textWindow.style.top = px(y);
+            textWindow.style.zIndex = 200;
+
+            textWindow.innerHTML = `
+                <div class="window-titlebar">
+                    <div class="window-title">📝 Text Performance - Notepad</div>
+                    <div class="window-controls">
+                        <div class="window-control" data-act="min">_</div>
+                        <div class="window-control" data-act="close">×</div>
+                    </div>
+                </div>
+                <div class="text-content">
+                    <textarea placeholder="Performansınız için buraya yazın... Kayıt sırasında canlı olarak yazabilirsiniz." 
+                              id="performanceText" 
+                              spellcheck="false"></textarea>
+                </div>
+            `;
+
+            desktop.appendChild(textWindow);
+
+            // Make draggable
+            const titlebar = textWindow.querySelector('.window-titlebar');
+            makeDraggable(textWindow, titlebar);
+
+            // Window controls
+            textWindow.querySelector('.window-controls').addEventListener('click', (e) => {
+                const act = e.target.getAttribute('data-act');
+                if (act === 'close') {
+                    closeTextWindow();
+                }
+                if (act === 'min') {
+                    textWindow.style.opacity = textWindow.style.opacity === '0.3' ? '1' : '0.3';
+                }
+            });
+
+            // Focus on textarea
+            setTimeout(() => {
+                const textarea = textWindow.querySelector('textarea');
+                textarea.focus();
+            }, 100);
+
+            isTextWindowOpen = true;
+            const btn = document.getElementById('textBtn');
+            btn.classList.add('active');
+            btn.textContent = '📝 Kapat';
+
+            document.getElementById('status').textContent = 'Metin performans penceresi açıldı.';
+        }
+
+        function closeTextWindow() {
+            if (textWindow) {
+                textWindow.style.transform = 'scale(0.8)';
+                textWindow.style.opacity = '0';
+                
+                setTimeout(() => {
+                    if (textWindow) {
+                        textWindow.remove();
+                        textWindow = null;
+                    }
+                }, 200);
+            }
+
+            isTextWindowOpen = false;
+            const btn = document.getElementById('textBtn');
+            btn.classList.remove('active');
+            btn.textContent = '📝 Text';
+
+            document.getElementById('status').textContent = 'Metin performans penceresi kapatıldı.';
+        }
+
+        /* ---------- Enhanced Text Features ---------- */
+        function initTextFeatures() {
+            // Keyboard shortcuts for text window
+            document.addEventListener('keydown', (e) => {
+                // Ctrl+T to toggle text window
+                if (e.ctrlKey && e.key === 't') {
+                    e.preventDefault();
+                    toggleTextWindow();
+                }
+                
+                // Ctrl+Shift+C to clear text (when text window is focused)
+                if (e.ctrlKey && e.shiftKey && e.key === 'C' && isTextWindowOpen) {
+                    const textarea = document.getElementById('performanceText');
+                    if (textarea && document.activeElement === textarea) {
+                        e.preventDefault();
+                        if (confirm('Metni temizlemek istediğinizden emin misiniz?')) {
+                            textarea.value = '';
+                            textarea.focus();
+                        }
+                    }
+                }
+            });
+        }
+
+        // Add some performance text templates (optional enhancement)
+        function insertTemplate(template) {
+            const textarea = document.getElementById('performanceText');
+            if (!textarea) return;
+            
+            const templates = {
+                'intro': 'Bu benim desktop documentary performansım...\n\n',
+                'poem': 'Ekranımda açılan pencereler,\nBir hikaye anlatıyor...\n\n',
+                'thoughts': 'Şu anda düşündüklerim:\n- \n- \n- \n\n'
+            };
+            
+            textarea.value += templates[template] || template;
+            textarea.focus();
+        }
     </script>
 </body>
 
