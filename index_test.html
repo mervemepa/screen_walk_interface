@@ -195,7 +195,11 @@
             border: 2px outset #c0c0c0;
             padding: 10px;
             z-index: 1002;
-            width: 240px
+            width: 240px;
+            min-width: 200px;
+            max-width: 600px;
+            resize: horizontal;
+            overflow: auto;
         }
 
         .controls h3 {
@@ -251,38 +255,145 @@
             width: 100%
         }
 
+        /* Resizable playlist */
         ul#playlist {
             margin: 6px 0 0 0;
             padding: 0;
             list-style: none;
-            max-height: 110px;
-            overflow: auto;
+            height: 120px;
+            /* Default height */
+            min-height: 60px;
+            max-height: 400px;
+            overflow-y: auto;
+            overflow-x: hidden;
             border: 1px inset #bbb;
-            background: #eee
+            background: #eee;
+            resize: vertical;
+            position: relative;
         }
 
+        /* Custom resize handle for playlist */
+        #playlist::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, transparent 0%, transparent 40%, #999 40%, #999 50%, transparent 50%, transparent 90%, #999 90%);
+            cursor: nw-resize;
+            pointer-events: none;
+        }
+
+        /* Media item styling with better layout */
         #playlist li {
-            padding: 4px 6px;
+            padding: 6px 8px;
             border-bottom: 1px solid #ddd;
             font-size: 11px;
             display: flex;
-            gap: 6px;
+            gap: 8px;
             align-items: center;
-            cursor: grab
+            cursor: grab;
+            min-height: 24px;
+            position: relative;
+        }
+
+        #playlist li:hover {
+            background: #f5f5f5;
         }
 
         #playlist li:last-child {
-            border-bottom: none
+            border-bottom: none;
         }
 
         #playlist .handle {
-            font-weight: bold
+            font-weight: bold;
+            color: #666;
+            cursor: grab;
+            user-select: none;
+        }
+
+        #playlist .name {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
+        }
+
+        #playlist .type {
+            background: #007acc;
+            color: white;
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-size: 9px;
+            text-transform: uppercase;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        #playlist .type.video {
+            background: #ff6b35;
+        }
+
+        #playlist .duration {
+            color: #666;
+            font-size: 10px;
+            min-width: 30px;
+            text-align: right;
+        }
+
+        /* Draggable resize handle for the entire panel */
+        .controls::before {
+            content: "";
+            position: absolute;
+            left: -5px;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            cursor: ew-resize;
+            background: transparent;
+            z-index: 10;
+        }
+
+        .controls.resizing {
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .controls.resizing * {
+            pointer-events: none;
+        }
+
+        /* Status bar with scroll info */
+        .playlist-info {
+            font-size: 9px;
+            color: #666;
+            text-align: right;
+            margin-top: 2px;
+            height: 12px;
+        }
+
+        /* Responsive text based on panel width */
+        @media (max-width: 300px) {
+            .controls {
+                font-size: 10px;
+            }
+
+            #playlist .type {
+                display: none;
+            }
+
+            #playlist .duration {
+                font-size: 9px;
+            }
         }
 
         .hint {
             font-size: 10px;
             color: #444;
-            margin-top: 6px
+            margin-top: 6px;
+            font-family: 'MS Sans Serif', sans-serif;
         }
     </style>
 </head>
@@ -335,7 +446,8 @@
         <div class="status" id="status">Dosya ekle veya Demo'ya bas.</div>
 
         <ul id="playlist"></ul>
-        <div class="hint">Listede sürükle-bırak ile sıralamayı değiştir.</div>
+        <div class="playlist-info"></div>
+        <div class="hint">Drag & Resize</div>
     </div>
 
     <!-- Taskbar -->
@@ -494,31 +606,71 @@
         /* ---------- Playlist UI ---------- */
         const playlistEl = document.getElementById('playlist');
         function renderPlaylist() {
-            playlistEl.innerHTML = '';
-            mediaItems.forEach((m, i) => {
-                const li = document.createElement('li');
-                li.draggable = true;
-                li.dataset.index = i;
-                li.innerHTML = `<span class="handle">↕</span> ${i + 1}. ${m.name} <span style="margin-left:auto">${m.type}</span>`;
-                // drag events
-                li.addEventListener('dragstart', e => {
-                    e.dataTransfer.setData('text/plain', i.toString());
-                });
-                li.addEventListener('dragover', e => e.preventDefault());
-                li.addEventListener('drop', e => {
-                    e.preventDefault();
-                    const from = parseInt(e.dataTransfer.getData('text/plain'), 10);
-                    const to = parseInt(li.dataset.index, 10);
-                    if (from === to) return;
-                    const item = mediaItems.splice(from, 1)[0];
-                    mediaItems.splice(to, 0, item);
-                    saveLocal(); renderPlaylist();
-                });
-                playlistEl.appendChild(li);
+            if (!mediaItems.length) {
+                playlistEl.innerHTML = '<li style="color:#666;font-style:italic;">Henüz medya eklenmedi</li>';
+                updatePlaylistInfo();
+                return;
+            }
+
+            playlistEl.innerHTML = mediaItems.map((item, i) => `
+            <li draggable="true" data-index="${i}">
+                <span class="handle">⋮⋮</span>
+                <span class="name" title="${item.name}">${item.name}</span>
+                <span class="type ${item.type}">${item.type === 'image' ? 'img' : 'vid'}</span>
+                <span class="duration">${(item.duration/1000).toFixed(1)}s</span>
+            </li>
+        `).join('');
+
+            // Re-attach drag and drop listeners
+            attachPlaylistDragListeners();
+            updatePlaylistInfo();
+        }
+
+        function attachPlaylistDragListeners() {
+            const items = playlistEl.querySelectorAll('li[draggable]');
+            items.forEach(item => {
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragover', handleDragOver);
+                item.addEventListener('drop', handleDrop);
+                item.addEventListener('dragend', handleDragEnd);
             });
-            document.getElementById('status').textContent = mediaItems.length
-                ? `${mediaItems.length} medya yüklendi`
-                : 'Dosya ekle veya Demo kullan.';
+        }
+
+        function handleDragStart(e) {
+            draggedIndex = parseInt(e.currentTarget.dataset.index);
+            e.currentTarget.style.opacity = '0.5';
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.style.borderTop = '2px solid #007acc';
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const dropIndex = parseInt(e.currentTarget.dataset.index);
+
+            if (draggedIndex !== null && draggedIndex !== dropIndex) {
+                // Reorder the array
+                const draggedItem = mediaItems.splice(draggedIndex, 1)[0];
+                mediaItems.splice(dropIndex, 0, draggedItem);
+
+                saveLocal();
+                renderPlaylist();
+
+                document.getElementById('status').textContent = 'Sıralama değiştirildi.';
+            }
+        }
+
+        function handleDragEnd(e) {
+            e.currentTarget.style.opacity = '';
+            e.currentTarget.style.borderTop = '';
+            draggedIndex = null;
+
+            // Clear all border highlights
+            playlistEl.querySelectorAll('li').forEach(li => {
+                li.style.borderTop = '';
+            });
         }
 
         /* ---------- Local persistence ---------- */
@@ -642,6 +794,191 @@
         desktop.addEventListener('drop', e => {
             e.preventDefault();
             if (e.dataTransfer.files && e.dataTransfer.files.length) addFiles(e.dataTransfer.files);
+        });
+
+        /* ---------- Resizable Panel System ---------- */
+        let isResizing = false;
+        let currentPanel = null;
+        let startX = 0;
+        let startWidth = 0;
+
+        function initializeResizablePanels() {
+            const controls = document.querySelector('.controls');
+            const playlist = document.getElementById('playlist');
+
+            // Panel width resizing
+            controls.addEventListener('mousedown', (e) => {
+                if (e.offsetX <= 5) { // Left edge resize
+                    isResizing = true;
+                    currentPanel = 'width';
+                    startX = e.clientX;
+                    startWidth = parseInt(window.getComputedStyle(controls).width, 10);
+                    controls.classList.add('resizing');
+                    document.body.style.cursor = 'ew-resize';
+                    e.preventDefault();
+                }
+            });
+
+            // Playlist height resizing (using CSS resize, but we track it)
+            const resizeObserver = new ResizeObserver(entries => {
+                updatePlaylistInfo();
+            });
+            resizeObserver.observe(playlist);
+
+            // Global mouse events for resizing
+            document.addEventListener('mousemove', (e) => {
+                if (!isResizing) return;
+
+                if (currentPanel === 'width') {
+                    const newWidth = startWidth + (e.clientX - startX);
+                    const minWidth = 200;
+                    const maxWidth = Math.min(600, window.innerWidth - 40);
+
+                    controls.style.width = Math.max(minWidth, Math.min(maxWidth, newWidth)) + 'px';
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isResizing) {
+                    isResizing = false;
+                    currentPanel = null;
+                    controls.classList.remove('resizing');
+                    document.body.style.cursor = '';
+                    saveResizePreferences();
+                }
+            });
+
+            // Load saved dimensions
+            loadResizePreferences();
+        }
+
+        function updatePlaylistInfo() {
+            const playlist = document.getElementById('playlist');
+            const infoEl = document.querySelector('.playlist-info');
+
+            if (!playlist || !infoEl) return;
+
+            const totalItems = mediaItems.length;
+            const visibleHeight = playlist.clientHeight;
+            const itemHeight = 32; // Approximate item height
+            const visibleItems = Math.floor(visibleHeight / itemHeight);
+
+            if (totalItems > visibleItems) {
+                infoEl.textContent = `${visibleItems}/${totalItems} görünür - kaydır`;
+            } else if (totalItems > 0) {
+                infoEl.textContent = `${totalItems} öğe`;
+            } else {
+                infoEl.textContent = '';
+            }
+        }
+
+        function saveResizePreferences() {
+            const controls = document.querySelector('.controls');
+            const playlist = document.getElementById('playlist');
+
+            const prefs = {
+                panelWidth: controls.style.width || '240px',
+                playlistHeight: playlist.style.height || '120px'
+            };
+
+            localStorage.setItem('dd_resize_prefs', JSON.stringify(prefs));
+        }
+
+        function loadResizePreferences() {
+            const saved = localStorage.getItem('dd_resize_prefs');
+            if (!saved) return;
+
+            try {
+                const prefs = JSON.parse(saved);
+                const controls = document.querySelector('.controls');
+                const playlist = document.getElementById('playlist');
+
+                if (prefs.panelWidth) {
+                    controls.style.width = prefs.panelWidth;
+                }
+                if (prefs.playlistHeight) {
+                    playlist.style.height = prefs.playlistHeight;
+                }
+            } catch (e) {
+                console.warn('Could not load resize preferences:', e);
+            }
+        }
+
+        /* ---------- Enhanced Playlist Rendering ---------- */
+        function renderPlaylist() {
+            if (!mediaItems.length) {
+                playlistEl.innerHTML = '<li style="color:#666;font-style:italic;">Henüz medya eklenmedi</li>';
+                updatePlaylistInfo();
+                return;
+            }
+
+            playlistEl.innerHTML = mediaItems.map((item, i) => `
+            <li draggable="true" data-index="${i}">
+                <span class="handle">⋮⋮</span>
+                <span class="name" title="${item.name}">${item.name}</span>
+                <span class="type ${item.type}">${item.type === 'image' ? 'img' : 'vid'}</span>
+                <span class="duration">${(item.duration/1000).toFixed(1)}s</span>
+            </li>
+        `).join('');
+
+            // Re-attach drag and drop listeners
+            attachPlaylistDragListeners();
+            updatePlaylistInfo();
+        }
+
+        function attachPlaylistDragListeners() {
+            const items = playlistEl.querySelectorAll('li[draggable]');
+            items.forEach(item => {
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragover', handleDragOver);
+                item.addEventListener('drop', handleDrop);
+                item.addEventListener('dragend', handleDragEnd);
+            });
+        }
+
+        let draggedIndex = null;
+
+        function handleDragStart(e) {
+            draggedIndex = parseInt(e.currentTarget.dataset.index);
+            e.currentTarget.style.opacity = '0.5';
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.style.borderTop = '2px solid #007acc';
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const dropIndex = parseInt(e.currentTarget.dataset.index);
+
+            if (draggedIndex !== null && draggedIndex !== dropIndex) {
+                // Reorder the array
+                const draggedItem = mediaItems.splice(draggedIndex, 1)[0];
+                mediaItems.splice(dropIndex, 0, draggedItem);
+
+                saveLocal();
+                renderPlaylist();
+
+                document.getElementById('status').textContent = 'Sıralama değiştirildi.';
+            }
+        }
+
+        function handleDragEnd(e) {
+            e.currentTarget.style.opacity = '';
+            e.currentTarget.style.borderTop = '';
+            draggedIndex = null;
+
+            // Clear all border highlights
+            playlistEl.querySelectorAll('li').forEach(li => {
+                li.style.borderTop = '';
+            });
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeResizablePanels();
+            // ...rest of initialization
         });
 
         /* init */
