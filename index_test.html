@@ -376,6 +376,14 @@
 
         function px(n) { return `${n}px`; }
 
+        // Add file validation
+        function validateFile(file) {
+            const maxSize = 100 * 1024 * 1024; // 100MB
+            const allowedTypes = ['image/', 'video/'];
+            return file.size <= maxSize &&
+                allowedTypes.some(type => file.type.startsWith(type));
+        }
+
         /* ---------- Smart layout ---------- */
         function generateSmartPosition(index, total) {
             const screenWidth = window.innerWidth;
@@ -531,6 +539,12 @@
         async function addFiles(fileList) {
             const items = Array.from(fileList);
             for (const f of items) {
+                if (!validateFile(f)) {
+                    const msg = `Geçersiz dosya: ${f.name} (tip: ${f.type}, boyut: ${(f.size / (1024 * 1024)).toFixed(1)}MB)`;
+                    document.getElementById('status').textContent = msg;
+                    setTimeout(() => { if (document.getElementById('status').textContent === msg) document.getElementById('status').textContent = ''; }, 5000);
+                    continue;
+                }
                 const url = URL.createObjectURL(f);
                 const type = f.type.startsWith('video') ? 'video' : 'image';
                 mediaItems.push({ name: f.name, type, url, duration: durationMs() });
