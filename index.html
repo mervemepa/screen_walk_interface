@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desktop Documentary</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'MS Sans Serif', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            background: #008080;
+        }
+
+        .desktop {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 1px, transparent 1px),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 1px, transparent 1px),
+                linear-gradient(45deg, #008080 0%, #006666 50%, #004444 100%);
+            background-size: 50px 50px, 50px 50px, 100% 100%;
+        }
+
+        /* Desktop Icons */
+        .desktop-icons {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 10;
+        }
+
+        .desktop-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 64px;
+            color: white;
+            font-size: 11px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .desktop-icon:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .desktop-icon-image {
+            width: 32px;
+            height: 32px;
+            background: #c0c0c0;
+            border: 1px outset #c0c0c0;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        /* Taskbar */
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(to bottom, #c0c0c0 0%, #a0a0a0 100%);
+            border-top: 1px solid #dfdfdf;
+            display: flex;
+            align-items: center;
+            padding: 0 4px;
+            z-index: 1001;
+        }
+
+        .start-button {
+            background: linear-gradient(to bottom, #c0c0c0 0%, #a0a0a0 100%);
+            border: 1px outset #c0c0c0;
+            padding: 2px 8px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 4px;
+        }
+
+        .start-button:active {
+            border: 1px inset #c0c0c0;
+        }
+
+        .taskbar-time {
+            margin-left: auto;
+            background: linear-gradient(to bottom, #dfdfdf 0%, #c0c0c0 100%);
+            border: 1px inset #c0c0c0;
+            padding: 2px 8px;
+            font-size: 11px;
+        }
+
+        .window {
+            position: absolute;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            opacity: 0;
+            transform: scale(0.1);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            min-width: 200px;
+            max-width: 500px;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.4);
+            z-index: 100;
+        }
+
+        .window.open {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .window-titlebar {
+            background: linear-gradient(to right, #000080 0%, #0000ff 100%);
+            height: 18px;
+            display: flex;
+            align-items: center;
+            padding: 2px 4px;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .window-controls {
+            margin-left: auto;
+            display: flex;
+            gap: 2px;
+        }
+
+        .window-control {
+            width: 16px;
+            height: 14px;
+            background: #c0c0c0;
+            border: 1px outset #c0c0c0;
+            font-size: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: black;
+            font-weight: bold;
+        }
+
+        .window-control:active {
+            border: 1px inset #c0c0c0;
+        }
+
+        .window-title {
+            margin-right: auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .window-content {
+            padding: 8px;
+            background: #c0c0c0;
+            border-top: 1px solid #808080;
+        }
+
+        .window-content img {
+            display: block;
+            max-width: 100%;
+            max-height: 400px;
+            border: 1px inset #c0c0c0;
+            padding: 2px;
+        }
+
+        .window-content video {
+            display: block;
+            max-width: 100%;
+            max-height: 400px;
+            border: 1px inset #c0c0c0;
+            padding: 2px;
+        }
+
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            padding: 8px;
+            z-index: 1000;
+        }
+
+        .controls h3 {
+            margin: 0 0 8px 0;
+            font-size: 11px;
+            color: #000080;
+        }
+
+        .btn {
+            background: linear-gradient(to bottom, #c0c0c0 0%, #a0a0a0 100%);
+            color: black;
+            border: 1px outset #c0c0c0;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 11px;
+            margin: 2px;
+            display: block;
+            width: 100px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(to bottom, #d0d0d0 0%, #b0b0b0 100%);
+        }
+
+        .btn:active {
+            border: 1px inset #c0c0c0;
+        }
+
+        .btn.recording {
+            background: linear-gradient(to bottom, #ff6b6b 0%, #ff5252 100%);
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .status {
+            font-size: 9px;
+            color: #666;
+            margin-top: 4px;
+            text-align: center;
+        }
+
+        /* Add some variety to window sizes */
+        .window.small { max-width: 300px; }
+        .window.medium { max-width: 400px; }
+        .window.large { max-width: 500px; }
+    </style>
+</head>
+<body>
+    <div class="desktop" id="desktop">
+        <!-- Desktop Icons -->
+        <div class="desktop-icons">
+            <div class="desktop-icon">
+                <div class="desktop-icon-image">📁</div>
+                <span>My Documents</span>
+            </div>
+            <div class="desktop-icon">
+                <div class="desktop-icon-image">🗑️</div>
+                <span>Recycle Bin</span>
+            </div>
+            <div class="desktop-icon">
+                <div class="desktop-icon-image">💻</div>
+                <span>My Computer</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="controls">
+        <h3>Desktop Documentary</h3>
+        <button class="btn" onclick="startDocumentary()">▶ Start</button>
+        <button class="btn" onclick="resetDesktop()">🔄 Reset</button>
+        <button class="btn" id="recordBtn" onclick="toggleRecording()">⏺ Record</button>
+        <div class="status" id="recordStatus"></div>
+    </div>
+
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <div class="start-button">Start</div>
+        <div class="desktop-time" id="clock">12:00 PM</div>
+    </div>
+
+    <script>
+        // Media files configuration
+        const mediaFiles = [
+            { name: 'img1.jpg', type: 'image', duration: 3000, path: 'materials/img1.jpg' },
+            { name: 'img2.jpg', type: 'image', duration: 3000, path: 'materials/img2.jpg' },
+            { name: 'img3.jpg', type: 'image', duration: 3000, path: 'materials/img3.jpg' },
+            { name: 'img4.jpg', type: 'image', duration: 3000, path: 'materials/img4.jpg' },
+            { name: 'img5.jpg', type: 'image', duration: 3000, path: 'materials/img5.jpg' },
+            // Add more files as needed - system will handle hundreds!
+        ];
+
+        let currentIndex = 0;
+        let isRunning = false;
+        let mediaRecorder = null;
+        let recordedChunks = [];
+        let isRecording = false;
+        let openWindows = [];
+
+        // Smart positioning system for screen collage
+        function generateSmartPosition(index, totalFiles) {
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight - 60; // Account for taskbar
+            
+            // Create a grid-based system with organic variation
+            const cols = Math.ceil(Math.sqrt(totalFiles * 1.5)); // More columns than rows
+            const rows = Math.ceil(totalFiles / cols);
+            
+            const cellWidth = screenWidth / cols;
+            const cellHeight = screenHeight / rows;
+            
+            const col = index % cols;
+            const row = Math.floor(index / cols);
+            
+            // Base position in grid
+            let baseX = col * cellWidth;
+            let baseY = row * cellHeight;
+            
+            // Add organic randomness (±30% of cell size)
+            const randomX = (Math.random() - 0.5) * cellWidth * 0.6;
+            const randomY = (Math.random() - 0.5) * cellHeight * 0.6;
+            
+            // Ensure windows stay on screen
+            const x = Math.max(20, Math.min(baseX + randomX, screenWidth - 350));
+            const y = Math.max(20, Math.min(baseY + randomY, screenHeight - 250));
+            
+            return { x, y };
+        }
+
+        function getRandomWindowSize() {
+            const sizes = ['small', 'medium', 'large'];
+            return sizes[Math.floor(Math.random() * sizes.length)];
+        }
+
+        // Update clock
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            document.getElementById('clock').textContent = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        function createWindow(media, index) {
+            const desktop = document.getElementById('desktop');
+            const window = document.createElement('div');
+            window.className = `window ${getRandomWindowSize()}`;
+            window.id = `window-${index}`;
+            
+            // Smart positioning for screen collage
+            const position = generateSmartPosition(index, mediaFiles.length);
+            window.style.left = position.x + 'px';
+            window.style.top = position.y + 'px';
+            
+            // Normal scale animation without rotation
+            window.style.transform = 'scale(0.1)';
+            
+            // Higher z-index for newer windows (layering effect)
+            window.style.zIndex = 100 + index;
+
+            let contentHTML = '';
+            if (media.type === 'image') {
+                contentHTML = `<img src="${media.path}" alt="${media.name}">`;
+            } else if (media.type === 'video') {
+                contentHTML = `<video controls autoplay muted>
+                                <source src="${media.path}" type="video/mp4">
+                              </video>`;
+            }
+
+            window.innerHTML = `
+                <div class="window-titlebar">
+                    <div class="window-title">${media.name}</div>
+                    <div class="window-controls">
+                        <div class="window-control">_</div>
+                        <div class="window-control">□</div>
+                        <div class="window-control" onclick="closeWindow('window-${index}')">×</div>
+                    </div>
+                </div>
+                <div class="window-content">
+                    ${contentHTML}
+                </div>
+            `;
+
+            desktop.appendChild(window);
+            openWindows.push(window);
+
+            // Animate window opening - normal scale up without rotation
+            setTimeout(() => {
+                window.classList.add('open');
+                window.style.transform = 'scale(1)';
+            }, 100);
+
+            return window;
+        }
+
+        function closeWindow(windowId) {
+            const window = document.getElementById(windowId);
+            if (window) {
+                window.style.transform = 'scale(0.1)';
+                window.style.opacity = '0';
+                setTimeout(() => {
+                    window.remove();
+                    openWindows = openWindows.filter(w => w.id !== windowId);
+                }, 300);
+            }
+        }
+
+        function openNextWindow() {
+            if (currentIndex >= mediaFiles.length || !isRunning) {
+                isRunning = false;
+                return;
+            }
+
+            const media = mediaFiles[currentIndex];
+            createWindow(media, currentIndex);
+            
+            currentIndex++;
+
+            // Faster intervals for collage effect
+            const delay = media.type === 'image' ? media.duration : 4000;
+            setTimeout(openNextWindow, delay);
+        }
+
+        function startDocumentary() {
+            if (isRunning) return;
+            
+            resetDesktop();
+            isRunning = true;
+            currentIndex = 0;
+            openNextWindow();
+        }
+
+        function resetDesktop() {
+            const windows = document.querySelectorAll('.window');
+            windows.forEach(window => window.remove());
+            openWindows = [];
+            currentIndex = 0;
+            isRunning = false;
+        }
+
+        async function toggleRecording() {
+            const recordBtn = document.getElementById('recordBtn');
+            const recordStatus = document.getElementById('recordStatus');
+
+            if (isRecording) {
+                // Stop recording
+                mediaRecorder.stop();
+                recordBtn.textContent = '⏺ Record';
+                recordBtn.classList.remove('recording');
+                recordStatus.textContent = 'Processing...';
+                isRecording = false;
+            } else {
+                // Start recording
+                try {
+                    const stream = await navigator.mediaDevices.getDisplayMedia({
+                        video: { 
+                            mediaSource: 'screen',
+                            width: { ideal: 1920 },
+                            height: { ideal: 1080 }
+                        },
+                        audio: true
+                    });
+
+                    recordedChunks = [];
+                    mediaRecorder = new MediaRecorder(stream, {
+                        mimeType: 'video/webm;codecs=vp9'
+                    });
+
+                    mediaRecorder.ondataavailable = (event) => {
+                        if (event.data.size > 0) {
+                            recordedChunks.push(event.data);
+                        }
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `desktop-documentary-${new Date().toISOString().slice(0,19).replace(/:/g,'-')}.webm`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                        recordStatus.textContent = 'Recording saved!';
+                        setTimeout(() => recordStatus.textContent = '', 3000);
+                    };
+
+                    mediaRecorder.start();
+                    recordBtn.textContent = '⏹ Stop';
+                    recordBtn.classList.add('recording');
+                    recordStatus.textContent = 'Recording...';
+                    isRecording = true;
+
+                } catch (err) {
+                    console.error('Error starting recording:', err);
+                    recordStatus.textContent = 'Recording failed!';
+                    setTimeout(() => recordStatus.textContent = '', 3000);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
