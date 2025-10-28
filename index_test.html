@@ -633,29 +633,30 @@
             const desktop = document.getElementById('desktop');
             const win = document.createElement('div');
             win.className = `window ${getRandomSize()}`;
-            win.id = `window-${index}`;
+            win.id = `window-${index}-${Date.now()}`; // Make unique for loops
 
-            const pos = generateSmartPosition(index, mediaItems.length);
-            win.style.left = px(pos.x); win.style.top = px(pos.y);
-            win.style.zIndex = 100 + index;
+            const pos = generateSmartPosition(index % mediaItems.length, mediaItems.length); // Use modulo for position
+            win.style.left = px(pos.x); 
+            win.style.top = px(pos.y);
+            win.style.zIndex = 100 + (index % 50); // Cycle z-index to prevent stacking issues
 
             const content = item.type === 'image'
                 ? `<img src="${item.url}" alt="${item.name}" />`
                 : `<video controls autoplay muted playsinline>
-         <source src="${item.url}" type="video/mp4">
-       </video>`;
+             <source src="${item.url}" type="video/mp4">
+           </video>`;
 
             win.innerHTML = `
-    <div class="window-titlebar">
-      <div class="window-title" title="${item.name}">${item.name}</div>
-      <div class="window-controls">
-        <div class="window-control" data-act="min">_</div>
-        <div class="window-control" data-act="max">□</div>
-        <div class="window-control" data-act="close">×</div>
-      </div>
-    </div>
-    <div class="window-content">${content}</div>
-  `;
+        <div class="window-titlebar">
+            <div class="window-title" title="${item.name}">${item.name}</div>
+            <div class="window-controls">
+                <div class="window-control" data-act="min">_</div>
+                <div class="window-control" data-act="max">□</div>
+                <div class="window-control" data-act="close">×</div>
+            </div>
+        </div>
+        <div class="window-content">${content}</div>
+    `;
 
             desktop.appendChild(win);
             openWindows.push(win);
@@ -663,7 +664,7 @@
             const titlebar = win.querySelector('.window-titlebar');
             makeDraggable(win, titlebar);
 
-            // controls
+            // Window controls
             win.querySelector('.window-controls').addEventListener('click', (e) => {
                 const act = e.target.getAttribute('data-act');
                 if (act === 'close') closeWindow(win.id);
@@ -671,15 +672,22 @@
                 if (act === 'max') win.style.opacity = 1;
             });
 
-            // appear
-            setTimeout(() => { win.classList.add('open'); win.style.transform = 'scale(1)'; }, 50);
+            // Appear animation
+            setTimeout(() => { 
+        win.classList.add('open'); 
+        win.style.transform = 'scale(1)'; 
+    }, 50);
 
-            // cap max open windows
+            // Cap max open windows
             const maxOpen = parseInt(document.getElementById('maxWin').value, 10);
             if (openWindows.length > maxOpen) {
                 const toClose = openWindows.shift();
                 if (toClose) closeWindow(toClose.id, true);
             }
+
+            // Update loop status
+            updateLoopStatus();
+            
             return win;
         }
 
@@ -850,7 +858,23 @@
 
         /* ---------- Documentary flow ---------- */
         function openNext() {
-            if (!isRunning || currentIndex >= mediaItems.length) { isRunning = false; return; }
+            if (!isRunning) return;
+            
+            // If we've reached the end, loop back to the beginning
+            if (currentIndex >= mediaItems.length) {
+                currentIndex = 0; // Reset to beginning
+                document.getElementById('status').textContent = 'Döngü: Başa dönüyor...';
+                
+                // Brief pause before restarting (optional)
+                setTimeout(() => {
+                    if (isRunning) { // Check if still running
+                        document.getElementById('status').textContent = 'Oynatılıyor... (döngüde)';
+                        openNext(); // Continue with first item
+                    }
+                }, 1000); // 1 second pause between loops
+                return;
+            }
+            
             const item = mediaItems[currentIndex++];
             createWindow(item, currentIndex - 1);
             const delay = item.type === 'image' ? item.duration : 4000;
@@ -858,19 +882,28 @@
         }
 
         function start() {
-            if (!mediaItems.length) { document.getElementById('status').textContent = 'Önce medya ekleyin.'; return; }
+            if (!mediaItems.length) { 
+                document.getElementById('status').textContent = 'Önce medya ekleyin.'; 
+                return; 
+            }
+            
             reset();
+            
             // seed
             const seedInput = document.getElementById('seed').value;
             rnd = seedInput ? seededRandom(parseInt(seedInput, 10) || 1) : Math.random;
-            isRunning = true; currentIndex = 0;
-            document.getElementById('status').textContent = 'Oynatılıyor...';
+            
+            isRunning = true; 
+            currentIndex = 0;
+            document.getElementById('status').textContent = 'Oynatılıyor... (döngü aktif)';
             openNext();
         }
 
         function reset() {
             document.querySelectorAll('.window').forEach(w => w.remove());
-            openWindows = []; currentIndex = 0; isRunning = false;
+            openWindows = []; 
+            currentIndex = 0; 
+            isRunning = false;
             document.getElementById('status').textContent = 'Resetlendi.';
         }
 
@@ -1039,111 +1072,27 @@
             }
         }
 
-        /* ---------- Enhanced Playlist Rendering ---------- */
-        function renderPlaylist() {
-            if (!mediaItems.length) {
-                playlistEl.innerHTML = '<li style="color:#666;font-style:italic;">Henüz medya eklenmedi</li>';
-                updatePlaylistInfo();
-                return;
-            }
-
-            playlistEl.innerHTML = mediaItems.map((item, i) => `
-            <li draggable="true" data-index="${i}">
-                <span class="handle">⋮⋮</span>
-                <span class="name" title="${item.name}">${item.name}</span>
-                <span class="type ${item.type}">${item.type === 'image' ? 'img' : 'vid'}</span>
-                <span class="duration">${(item.duration/1000).toFixed(1)}s</span>
-                <button class="delete-btn" onclick="deleteItem(${i})" title="Bu öğeyi sil">🗑</button>
-            </li>
-        `).join('');
-
-            // Re-attach drag and drop listeners
-            attachPlaylistDragListeners();
-            updatePlaylistInfo();
-        }
-
-        function attachPlaylistDragListeners() {
-            const items = playlistEl.querySelectorAll('li[draggable]');
-            items.forEach(item => {
-                item.addEventListener('dragstart', handleDragStart);
-                item.addEventListener('dragover', handleDragOver);
-                item.addEventListener('drop', handleDrop);
-                item.addEventListener('dragend', handleDragEnd);
-                
-                // Prevent drag when clicking delete button
-                const deleteBtn = item.querySelector('.delete-btn');
-                if (deleteBtn) {
-                    deleteBtn.addEventListener('mousedown', (e) => {
-                        e.stopPropagation();
-                    });
-                }
-            });
-        }
-
-        let draggedIndex = null;
-
-        function handleDragStart(e) {
-            // Prevent dragging if clicking on delete button
-            if (e.target.classList.contains('delete-btn')) {
-                e.preventDefault();
-                return false;
-            }
+        /* ---------- Optional: Add loop indicator ---------- */
+        function updateLoopStatus() {
+            if (!isRunning) return;
             
-            draggedIndex = parseInt(e.currentTarget.dataset.index);
-            e.currentTarget.style.opacity = '0.5';
+            const totalItems = mediaItems.length;
+            const currentLoop = Math.floor((currentIndex - 1) / totalItems) + 1;
+            const itemInLoop = ((currentIndex - 1) % totalItems) + 1;
             
-            // Disable delete buttons during drag
-            e.currentTarget.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.style.pointerEvents = 'none';
-            });
-        }
-
-        function handleDragOver(e) {
-            e.preventDefault();
-            e.currentTarget.style.borderTop = '2px solid #007acc';
-        }
-
-        function handleDrop(e) {
-            e.preventDefault();
-            const dropIndex = parseInt(e.currentTarget.dataset.index);
-
-            if (draggedIndex !== null && draggedIndex !== dropIndex) {
-                // Reorder the array
-                const draggedItem = mediaItems.splice(draggedIndex, 1)[0];
-                mediaItems.splice(dropIndex, 0, draggedItem);
-
-                saveLocal();
-                renderPlaylist();
-
-                document.getElementById('status').textContent = 'Sıralama değiştirildi.';
+            if (currentIndex > totalItems) {
+                document.getElementById('status').textContent = 
+                    `Döngü ${currentLoop} - Öğe ${itemInLoop}/${totalItems}`;
             }
         }
 
-        function handleDragEnd(e) {
-            e.currentTarget.style.opacity = '';
-            e.currentTarget.style.borderTop = '';
-            draggedIndex = null;
-
-            // Re-enable delete buttons after drag
-            playlistEl.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.style.pointerEvents = 'auto';
-            });
-
-            // Clear all border highlights
-            playlistEl.querySelectorAll('li').forEach(li => {
-                li.style.borderTop = '';
-            });
-        }
-
-        // Initialize when DOM is loaded
+        /* ---------- Initialize everything ---------- */
         document.addEventListener('DOMContentLoaded', () => {
             initializeResizablePanels();
             initTextFeatures();
-            // ...rest of initialization
+            loadLocal();
+            renderPlaylist();
         });
-
-        /* init */
-        loadLocal(); renderPlaylist();
 
         /* ---------- Text Performance Window ---------- */
         let textWindow = null;
