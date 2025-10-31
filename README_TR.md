@@ -4,6 +4,21 @@ Windows 95 nostaljisiyle otomatik görsel kolajlar ve canlı metin performanslar
 
 ![Desktop Documentary TR Demo](demo-screenshot-tr.png)
 
+---
+
+## 📜 License and Use Notice
+
+**Desktop Documentary © 2025 Merve Mepa**  
+Licensed under **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)**
+
+You may share this project, but:
+
+- You **must** give appropriate credit to Merve Mepa,
+- You **cannot** use it for commercial purposes,
+- You **cannot** modify or redistribute altered versions.
+
+🔗 License details: [https://creativecommons.org/licenses/by-nc-nd/4.0/](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+
 ## 🎯 Desktop Documentary Nedir?
 
 Desktop Documentary, resim ve videolarınızı akıllı basamaklama düzenlerinde otomatik olarak açan pencereler halinde **otomatik görsel performanslar** oluşturur. İdeal kullanım alanları:

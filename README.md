@@ -4,6 +4,21 @@ A nostalgic Windows 95-style web application for creating automated visual colla
 
 ![Desktop Documentary Demo](demo-screenshot.png)
 
+---
+
+## 📜 License and Use Notice
+
+**Desktop Documentary © 2025 Merve Mepa**  
+Licensed under **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)**
+
+You may share this project, but:
+
+- You **must** give appropriate credit to Merve Mepa,
+- You **cannot** use it for commercial purposes,
+- You **cannot** modify or redistribute altered versions.
+
+🔗 License details: [https://creativecommons.org/licenses/by-nc-nd/4.0/](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+
 ## 🎯 What is Desktop Documentary?
 
 Desktop Documentary creates **automated visual performances** by opening multiple windows containing your images and videos in intelligent cascade patterns across a virtual desktop. Perfect for:
