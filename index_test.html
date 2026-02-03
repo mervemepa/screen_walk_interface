@@ -169,18 +169,22 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             position: absolute;
             background: #c0c0c0;
             border: 2px outset #c0c0c0;
+            min-width: 200px;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-family: 'MS Sans Serif', sans-serif;
+            font-size: 11px;
+            transform: scale(0.8);
             opacity: 0;
-            transform: scale(.1);
-            transition: all .6s cubic-bezier(.34, 1.56, .64, 1);
-            min-width: 220px;
-            max-width: 520px;
-            box-shadow: 4px 4px 8px var(--shadow);
-            z-index: 100
+            transition: transform 0.1s ease, opacity 0.1s ease;
+            z-index: 1;
         }
 
         .window.open {
             opacity: 1;
-            transform: scale(1)
+            transform: scale(1);
         }
 
         .window-titlebar {
@@ -231,39 +235,12 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             background: #c0c0c0;
             border-top: 1px solid #808080;
             position: relative;
-        }
-
-        /* Resize handles */
-        .resize-handle {
-            position: absolute;
-            background: transparent;
-            z-index: 10;
-        }
-
-        .resize-handle.bottom-right {
-            bottom: 0;
-            right: 0;
-            width: 16px;
-            height: 16px;
-            cursor: se-resize;
-        }
-
-        .resize-handle.bottom {
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 8px;
-            cursor: s-resize;
-        }
-
-        .resize-handle.right {
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 8px;
-            height: 20px;
-            cursor: e-resize;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            min-height: 0;
         }
 
         .window-content img,
@@ -273,6 +250,8 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             padding: 2px;
             background: #e6e6e6;
             object-fit: contain;
+            width: 100%;
+            height: 100%;
         }
 
         /* Audio player styles */
@@ -821,86 +800,9 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         }
 
         /* ---------- Dynamic Window Sizing ---------- */
-        function resizeWindowToContent(mediaElement) {
-            const window = mediaElement.closest('.window');
-            if (!window) return;
-            
-            const titlebarHeight = 18;
-            const contentPadding = 16;
-            const borderWidth = 4;
-            
-            // Define maximum window dimensions - smaller for better UX
-            const maxWindowWidth = 450;
-            const maxWindowHeight = 350;
-            const minWindowWidth = 200;
-            const minWindowHeight = 150;
-            
-            let mediaWidth, mediaHeight;
-            
-            if (mediaElement.tagName === 'IMG') {
-                const naturalWidth = mediaElement.naturalWidth || 320;
-                const naturalHeight = mediaElement.naturalHeight || 240;
-                const aspectRatio = naturalWidth / naturalHeight;
-                
-                // Calculate maximum content area (window size minus chrome)
-                const maxContentWidth = maxWindowWidth - contentPadding - borderWidth;
-                const maxContentHeight = maxWindowHeight - titlebarHeight - contentPadding - borderWidth;
-                
-                // Scale down if too large, but don't scale up small images too much
-                if (naturalWidth > maxContentWidth || naturalHeight > maxContentHeight) {
-                    if (naturalWidth / maxContentWidth > naturalHeight / maxContentHeight) {
-                        mediaWidth = maxContentWidth;
-                        mediaHeight = maxContentWidth / aspectRatio;
-                    } else {
-                        mediaHeight = maxContentHeight;
-                        mediaWidth = maxContentHeight * aspectRatio;
-                    }
-                } else {
-                    // Use natural size but ensure minimum
-                    mediaWidth = Math.max(naturalWidth, 150);
-                    mediaHeight = Math.max(naturalHeight, 100);
-                }
-                
-            } else if (mediaElement.tagName === 'VIDEO') {
-                const videoWidth = mediaElement.videoWidth || 320;
-                const videoHeight = mediaElement.videoHeight || 240;
-                const aspectRatio = videoWidth / videoHeight;
-                
-                const maxContentWidth = maxWindowWidth - contentPadding - borderWidth;
-                const maxContentHeight = maxWindowHeight - titlebarHeight - contentPadding - borderWidth;
-                
-                // For videos, always scale to fit within reasonable size regardless of original dimensions
-                if (videoWidth / maxContentWidth > videoHeight / maxContentHeight) {
-                    mediaWidth = maxContentWidth;
-                    mediaHeight = maxContentWidth / aspectRatio;
-                } else {
-                    mediaHeight = maxContentHeight;
-                    mediaWidth = maxContentHeight * aspectRatio;
-                }
-                
-                // Ensure minimum video size for visibility
-                if (mediaWidth < 240) {
-                    mediaWidth = 240;
-                    mediaHeight = 240 / aspectRatio;
-                }
-                if (mediaHeight < 180) {
-                    mediaHeight = 180;
-                    mediaWidth = 180 * aspectRatio;
-                }
-            }
-            
-            // Set the media element size explicitly
-            mediaElement.style.width = px(Math.round(mediaWidth));
-            mediaElement.style.height = px(Math.round(mediaHeight));
-            mediaElement.style.maxWidth = 'none';
-            mediaElement.style.maxHeight = 'none';
-            
-            // Calculate final window size
-            const finalWindowWidth = Math.min(Math.max(mediaWidth + contentPadding + borderWidth, minWindowWidth), maxWindowWidth);
-            const finalWindowHeight = Math.min(Math.max(mediaHeight + titlebarHeight + contentPadding + borderWidth, minWindowHeight), maxWindowHeight);
-            
-            window.style.width = px(Math.round(finalWindowWidth));
-            window.style.height = px(Math.round(finalWindowHeight));
+        function fitMediaToRandomWindow(mediaElement) {
+            // Let CSS handle scaling with width: 100%, height: 100% and object-fit: contain
+            // This ensures media fills the randomly-sized window content area
         }
 
         /* ---------- Window Focusing ---------- */
@@ -1019,37 +921,8 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         }
 
         function resizeMediaToWindow(mediaElement, windowWidth, windowHeight) {
-            const titlebarHeight = 18;
-            const contentPadding = 16;
-            const borderWidth = 4;
-            
-            const availableWidth = windowWidth - contentPadding - borderWidth;
-            const availableHeight = windowHeight - titlebarHeight - contentPadding - borderWidth;
-            
-            if (mediaElement.tagName === 'IMG') {
-                const aspectRatio = mediaElement.naturalWidth / mediaElement.naturalHeight;
-                
-                if (availableWidth / aspectRatio <= availableHeight) {
-                    mediaElement.style.width = px(availableWidth);
-                    mediaElement.style.height = px(availableWidth / aspectRatio);
-                } else {
-                    mediaElement.style.height = px(availableHeight);
-                    mediaElement.style.width = px(availableHeight * aspectRatio);
-                }
-            } else if (mediaElement.tagName === 'VIDEO') {
-                const aspectRatio = (mediaElement.videoWidth || 16) / (mediaElement.videoHeight || 9);
-                
-                if (availableWidth / aspectRatio <= availableHeight) {
-                    mediaElement.style.width = px(availableWidth);
-                    mediaElement.style.height = px(availableWidth / aspectRatio);
-                } else {
-                    mediaElement.style.height = px(availableHeight);
-                    mediaElement.style.width = px(availableHeight * aspectRatio);
-                }
-            }
-            
-            mediaElement.style.maxWidth = 'none';
-            mediaElement.style.maxHeight = 'none';
+            // CSS handles the scaling automatically with width: 100%, height: 100%
+            // Media will scale to fit the resized window dimensions
         }
 
         /* ---------- Chaotic random layout ---------- */
@@ -1159,13 +1032,17 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             win.id = `window-${index}-${Date.now()}`; // Make unique for loops
 
             const pos = generateChaoticPosition(index % mediaItems.length, mediaItems.length);
-            win.style.left = px(pos.x); 
+            const size = getChaoticSize();
+            
+            win.style.left = px(pos.x);
             win.style.top = px(pos.y);
+            win.style.width = px(size.width);
+            win.style.height = px(size.height);
             win.style.zIndex = 100 + Math.floor(rnd() * 50); // Random z-index for more chaos
 
             const content = item.type === 'image'
-                ? `<img src="${item.url}" alt="${item.name}" onload="resizeWindowToContent(this)" />`
-                : `<video controls autoplay muted playsinline onloadedmetadata="resizeWindowToContent(this)">
+                ? `<img src="${item.url}" alt="${item.name}" onload="fitMediaToRandomWindow(this)" />`
+                : `<video controls autoplay muted playsinline onloadedmetadata="fitMediaToRandomWindow(this)">
              <source src="${item.url}" type="video/mp4">
            </video>`;
 
