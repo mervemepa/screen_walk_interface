@@ -74,10 +74,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         }
 
         .desktop-icon-image {
-            width: 32px;
-            height: 32px;
-            background: #c0c0c0;
-            border: 1px outset #c0c0c0;
+            width: 64px;
+            height: 64px;
+            background: transparent;
+            border: none;
             margin-bottom: 4px;
             display: flex;
             align-items: center;
@@ -88,6 +88,24 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             font-family: 'MS Sans Serif', sans-serif;
             text-align: center;
             line-height: 1;
+        }
+
+        .desktop-icon-image img {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+        }
+
+        /* Fallback styling when images fail */
+        .desktop-icon-image.text-fallback {
+            background: #ffdd44;
+            color: #8b4513;
+        }
+
+        .desktop-icon-image img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
         }
 
         /* Classic Windows icon styling */
@@ -602,6 +620,16 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             font-size: 10px;
             min-width: auto;
         }
+
+        /* Custom Windows 95 Cursor */
+        body {
+            cursor: url('materials/computer-mouse-pointer-cursor-fagor-automation-gmbh-windows-95-windows-cursor-82f51c165e80ea90af0c79293d1fc9b2.png'), auto;
+        }
+
+        /* Different cursor for clickable elements */
+        .btn, .desktop-icon, .window-control, button, input[type="range"], input[type="file"], .window-titlebar {
+            cursor: url('materials/computer-mouse-pointer-cursor-fagor-automation-gmbh-windows-95-windows-cursor-82f51c165e80ea90af0c79293d1fc9b2.png'), pointer;
+        }
     </style>
 </head>
 
@@ -618,10 +646,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                 <div class="desktop-icon-image">�</div><span>My Computer</span>
             </div>
             <div class="desktop-icon">
-                <div class="desktop-icon-image">🌐</div><span>Network Neighborhood</span>
-            </div>
-            <div class="desktop-icon">
-                <div class="desktop-icon-image">⚙</div><span>Control Panel</span>
+                <div class="desktop-icon-image"><img src="materials/network.gif" alt="Network" style="width:56px;height:56px;"></div><span>Network Neighborhood</span>
             </div>
         </div>
     </div>
@@ -1618,6 +1643,18 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             textarea.value += templates[template] || template;
             textarea.focus();
         }
+
+        /* ---------- Fix Desktop Icons ---------- */
+        function fixDesktopIcons() {
+            const icons = document.querySelectorAll('.desktop-icon-image');
+            if (icons[0]) icons[0].innerHTML = '<img src="materials/my-documents.png" alt="Documents" style="width:56px;height:56px;">';
+            if (icons[1]) icons[1].innerHTML = '<img src="materials/recycle-bin.png" alt="Recycle" style="width:56px;height:56px;">';
+            if (icons[2]) icons[2].innerHTML = '<img src="materials/my-computer.png" alt="Computer" style="width:56px;height:56px;">';
+        }
+        
+        // Fix icons when page loads
+        document.addEventListener('DOMContentLoaded', fixDesktopIcons);
+        
     </script>
 </body>
 
