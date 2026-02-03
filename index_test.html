@@ -82,7 +82,38 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px
+            font-size: 8px;
+            font-weight: bold;
+            color: #000;
+            font-family: 'MS Sans Serif', sans-serif;
+            text-align: center;
+            line-height: 1;
+        }
+
+        /* Classic Windows icon styling */
+        .desktop-icon-image.folder {
+            color: #ffd700;
+            background: linear-gradient(135deg, #f0f0f0 0%, #d0d0d0 100%);
+        }
+        
+        .desktop-icon-image.recycle {
+            color: #666;
+            background: linear-gradient(135deg, #f0f0f0 0%, #d0d0d0 100%);
+        }
+        
+        .desktop-icon-image.computer {
+            color: #4169e1;
+            background: linear-gradient(135deg, #f0f0f0 0%, #d0d0d0 100%);
+        }
+        
+        .desktop-icon-image.network {
+            color: #228b22;
+            background: linear-gradient(135deg, #f0f0f0 0%, #d0d0d0 100%);
+        }
+        
+        .desktop-icon-image.settings {
+            color: #dc143c;
+            background: linear-gradient(135deg, #f0f0f0 0%, #d0d0d0 100%);
         }
 
         .taskbar {
@@ -191,6 +222,39 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             border: 1px inset #c0c0c0;
             padding: 2px;
             background: #e6e6e6
+        }
+
+        /* Audio player styles */
+        .audio-player {
+            text-align: center;
+            padding: 20px;
+            background: #e6e6e6;
+            border: 1px inset #c0c0c0;
+        }
+
+        .audio-player audio {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .audio-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .audio-icon {
+            font-size: 48px;
+            opacity: 0.8;
+        }
+
+        .audio-title {
+            font-weight: bold;
+            font-size: 12px;
+            color: #000080;
+            word-wrap: break-word;
+            max-width: 100%;
         }
 
         .controls {
@@ -492,6 +556,52 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             background: linear-gradient(to bottom, #b0c4de 0%, #87ceeb 100%);
             border: 1px inset #87ceeb;
         }
+
+        /* Audio Section Styles */
+        .audio-section {
+            margin: 10px 0;
+            padding: 8px;
+            border: 1px inset #c0c0c0;
+            background: #e6e6e6;
+        }
+
+        .audio-section h4 {
+            margin: 0 0 8px 0;
+            font-size: 11px;
+            color: #000080;
+        }
+
+        .btn.audio-btn {
+            background: linear-gradient(to bottom, #dda0dd 0%, #ba55d3 100%);
+            border: 1px outset #dda0dd;
+        }
+
+        .btn.audio-btn:hover {
+            background: linear-gradient(to bottom, #e6b3e6 0%, #c967c9 100%);
+        }
+
+        .audio-controls {
+            margin-top: 8px;
+        }
+
+        .audio-controls audio {
+            width: 100%;
+            height: 32px;
+            margin-bottom: 5px;
+        }
+
+        .audio-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+        }
+
+        .btn.small {
+            padding: 2px 6px;
+            font-size: 10px;
+            min-width: auto;
+        }
     </style>
 </head>
 
@@ -499,13 +609,19 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
     <div class="desktop" id="desktop">
         <div class="desktop-icons">
             <div class="desktop-icon">
-                <div class="desktop-icon-image">📁</div><span>My Documents</span>
+                <div class="desktop-icon-image">�️</div><span>My Documents</span>
             </div>
             <div class="desktop-icon">
-                <div class="desktop-icon-image">🗑️</div><span>Recycle Bin</span>
+                <div class="desktop-icon-image">�</div><span>Recycle Bin</span>
             </div>
             <div class="desktop-icon">
-                <div class="desktop-icon-image">💻</div><span>My Computer</span>
+                <div class="desktop-icon-image">�</div><span>My Computer</span>
+            </div>
+            <div class="desktop-icon">
+                <div class="desktop-icon-image">🌐</div><span>Network Neighborhood</span>
+            </div>
+            <div class="desktop-icon">
+                <div class="desktop-icon-image">⚙</div><span>Control Panel</span>
             </div>
         </div>
     </div>
@@ -514,34 +630,50 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
     <div class="controls">
         <h3>Desktop Documentary</h3>
         <div class="row">
-            <button class="btn" id="addBtn">📥 Medya Ekle</button>
-            <button class="btn" id="demoBtn" title="Örnek 5 görsel yükler">✨ Demo</button>
-            <button class="btn text-btn" id="textBtn" title="Performans için metin kutusu aç">📝 Text</button>
+            <button class="btn" id="addBtn">📥 Upload Media</button>
+            <button class="btn" id="demoBtn" title="Loads 5 sample images">✨ Demo</button>
+            <button class="btn text-btn" id="textBtn" title="Open text box for performance">📝 Text</button>
             <input type="file" id="filePicker" accept="image/*,video/*" multiple hidden />
         </div>
 
+        <!-- Audio Section -->
+        <div class="audio-section">
+            <h4>🎵 Background Audio</h4>
+            <button class="btn audio-btn" id="audioBtn">🎵 Upload Audio</button>
+            <input type="file" id="audioPicker" accept="audio/*" multiple hidden />
+            <div id="audioPlayer" class="audio-controls" style="display:none;">
+                <audio id="backgroundAudio" controls loop>
+                    Your browser does not support audio.
+                </audio>
+                <div class="audio-info">
+                    <span id="audioTitle">No audio selected</span>
+                    <button id="clearAudio" class="btn small">×</button>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
-            <label for="speed">Süre (sn):</label>
+            <label for="speed">Duration (s):</label>
             <input id="speed" type="range" min="1" max="8" step="0.5" value="3" />
             <span id="speedVal" style="font-size:11px">3.0</span>
         </div>
 
         <div class="row">
-            <label for="maxWin">Maks Pencere:</label>
+            <label for="maxWin">Max Windows:</label>
             <input id="maxWin" type="range" min="3" max="20" step="1" value="8" />
             <span id="maxWinVal" style="font-size:11px">8</span>
         </div>
 
         <div class="row">
-            <label for="seed">Rastgele Tohum:</label>
-            <input id="seed" type="number" value="" placeholder="opsiyonel" style="width:100%" />
+            <label for="seed">Random Seed:</label>
+            <input id="seed" type="number" value="" placeholder="optional" style="width:100%" />
         </div>
 
-        <button class="btn block" id="startBtn">▶ Başlat</button>
+        <button class="btn block" id="startBtn">▶ Start</button>
         <button class="btn block" id="resetBtn">🔄 Reset</button>
-        <button class="btn block rec" id="recBtn">⏺ Kayıt</button>
+        <button class="btn block rec" id="recBtn">⏺ Record</button>
 
-        <div class="status" id="status">Dosya ekle veya Demo'ya bas.</div>
+        <div class="status" id="status">Add files or press Demo.</div>
 
         <ul id="playlist"></ul>
         <div class="playlist-info"></div>
@@ -556,7 +688,9 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
 
     <script>
         /* ---------- State ---------- */
-        let mediaItems = [];       // {name, type:'image'|'video', url, duration}
+        let mediaItems = [];       // {name, type:'image'|'video', url, duration} - visual media only
+        let audioItems = [];       // {name, url} - background audio files
+        let currentAudio = null;   // currently loaded audio
         let isRunning = false;
         let currentIndex = 0;
         let openWindows = [];
@@ -564,6 +698,34 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         let recordedChunks = [];
         let isRecording = false;
         let rnd = Math.random;     // seed'lenebilir
+        let draggedIndex = null;   // for drag and drop functionality
+
+        /* ---------- System Sounds ---------- */
+        const systemSounds = {
+            open: () => playTone(800, 100),
+            close: () => playTone(400, 150),
+            start: () => playTone([600, 800, 1000], 200),
+            error: () => playTone(200, 300)
+        };
+
+        function playTone(frequencies, duration = 100) {
+            if (!frequencies) return;
+            const freqArray = Array.isArray(frequencies) ? frequencies : [frequencies];
+            
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const gainNode = audioContext.createGain();
+            gainNode.connect(audioContext.destination);
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            
+            freqArray.forEach((freq, index) => {
+                const oscillator = audioContext.createOscillator();
+                oscillator.connect(gainNode);
+                oscillator.frequency.value = freq;
+                oscillator.type = 'sine';
+                oscillator.start(audioContext.currentTime + index * 0.05);
+                oscillator.stop(audioContext.currentTime + duration / 1000);
+            });
+        }
 
         /* ---------- Helpers ---------- */
         function seededRandom(seed) {
@@ -586,7 +748,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
 
         function px(n) { return `${n}px`; }
 
-        // Add file validation
+        // Add file validation for visual media
         function validateFile(file) {
             const maxSize = 100 * 1024 * 1024; // 100MB
             const allowedTypes = ['image/', 'video/'];
@@ -594,28 +756,93 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                 allowedTypes.some(type => file.type.startsWith(type));
         }
 
-        /* ---------- Smart layout ---------- */
-        function generateSmartPosition(index, total) {
-            const screenWidth = window.innerWidth;
-            const screenHeight = window.innerHeight - 60; // taskbar
-            const cols = Math.ceil(Math.sqrt(total * 1.5));
-            const rows = Math.ceil(total / cols);
-            const cellW = screenWidth / cols;
-            const cellH = screenHeight / rows;
-            const col = index % cols;
-            const row = Math.floor(index / cols);
-            const baseX = col * cellW;
-            const baseY = row * cellH;
-            const randomX = (rnd() - .5) * cellW * 0.6;
-            const randomY = (rnd() - .5) * cellH * 0.6;
-            const x = Math.max(20, Math.min(baseX + randomX, screenWidth - 360));
-            const y = Math.max(20, Math.min(baseY + randomY, screenHeight - 260));
-            return { x, y };
+        // Add file validation for audio
+        function validateAudioFile(file) {
+            const maxSize = 50 * 1024 * 1024; // 50MB for audio
+            return file.size <= maxSize && file.type.startsWith('audio/');
         }
 
-        function getRandomSize() {
-            const sizes = ['small', 'medium', 'large'];
-            return sizes[Math.floor(rnd() * sizes.length)];
+        /* ---------- Chaotic random layout ---------- */
+        function generateChaoticPosition(index, total) {
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight - 60; // taskbar
+            
+            // Create clusters and scattered elements for organic feel
+            const useCluster = rnd() < 0.4; // 40% chance for clustering
+            
+            if (useCluster && total > 3) {
+                // Create loose clusters around random points
+                const clusterCenterX = rnd() * (screenWidth * 0.6) + screenWidth * 0.2;
+                const clusterCenterY = rnd() * (screenHeight * 0.6) + screenHeight * 0.2;
+                const scatterRange = 150 + rnd() * 200; // Random scatter range
+                
+                const x = Math.max(20, Math.min(
+                    clusterCenterX + (rnd() - 0.5) * scatterRange,
+                    screenWidth - 420
+                ));
+                const y = Math.max(20, Math.min(
+                    clusterCenterY + (rnd() - 0.5) * scatterRange,
+                    screenHeight - 320
+                ));
+                
+                return { x, y };
+            } else {
+                // Completely scattered positioning
+                const padding = 20;
+                const maxX = screenWidth - 420; // leave room for window width
+                const maxY = screenHeight - 320; // leave room for window height
+                
+                // Use different random distributions for more organic feel
+                let x, y;
+                if (rnd() < 0.3) {
+                    // Sometimes prefer edges (30% chance)
+                    x = rnd() < 0.5 ? 
+                        padding + rnd() * 200 : // Left side
+                        maxX - 200 + rnd() * 200; // Right side
+                    y = padding + (rnd() * (maxY - padding));
+                } else {
+                    // Normal random distribution
+                    x = padding + (rnd() * (maxX - padding));
+                    y = padding + (rnd() * (maxY - padding));
+                }
+                
+                return { x, y };
+            }
+        }
+
+        function getChaoticSize() {
+            // More varied size distribution with larger sizes
+            const sizeVariations = [
+                { min: 280, max: 420, weight: 0.3 }, // Small
+                { min: 380, max: 580, weight: 0.4 }, // Medium
+                { min: 520, max: 720, weight: 0.2 }, // Large
+                { min: 240, max: 320, weight: 0.1 }  // Compact (for variety)
+            ];
+            
+            // Select size category based on weights
+            const rand = rnd();
+            let cumulative = 0;
+            let selectedRange = sizeVariations[1]; // default to medium
+            
+            for (const variation of sizeVariations) {
+                cumulative += variation.weight;
+                if (rand <= cumulative) {
+                    selectedRange = variation;
+                    break;
+                }
+            }
+            
+            const width = selectedRange.min + (rnd() * (selectedRange.max - selectedRange.min));
+            
+            // Height should somewhat correlate with width but with variation
+            const aspectRatio = 0.6 + rnd() * 0.6; // Random aspect ratio between 0.6 and 1.2
+            const height = Math.max(180, width * aspectRatio); // Increased minimum height
+            
+            return { 
+                width: Math.floor(width), 
+                height: Math.floor(height),
+                className: '' // no size class needed
+            };
         }
 
         /* ---------- Window creation + drag ---------- */
@@ -638,13 +865,16 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         function createWindow(item, index) {
             const desktop = document.getElementById('desktop');
             const win = document.createElement('div');
-            win.className = `window ${getRandomSize()}`;
+            const size = getChaoticSize();
+            win.className = `window ${size.className}`;
             win.id = `window-${index}-${Date.now()}`; // Make unique for loops
 
-            const pos = generateSmartPosition(index % mediaItems.length, mediaItems.length); // Use modulo for position
+            const pos = generateChaoticPosition(index % mediaItems.length, mediaItems.length); // Use modulo for position
             win.style.left = px(pos.x); 
             win.style.top = px(pos.y);
-            win.style.zIndex = 100 + (index % 50); // Cycle z-index to prevent stacking issues
+            win.style.width = px(size.width);
+            win.style.height = px(size.height);
+            win.style.zIndex = 100 + Math.floor(rnd() * 50); // Random z-index for more chaos
 
             const content = item.type === 'image'
                 ? `<img src="${item.url}" alt="${item.name}" />`
@@ -681,7 +911,8 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             // Appear animation
             setTimeout(() => { 
         win.classList.add('open'); 
-        win.style.transform = 'scale(1)'; 
+        win.style.transform = 'scale(1)';
+        systemSounds.open(); // Play open sound
     }, 50);
 
             // Cap max open windows
@@ -713,7 +944,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         const playlistEl = document.getElementById('playlist');
         function renderPlaylist() {
             if (!mediaItems.length) {
-                playlistEl.innerHTML = '<li style="color:#666;font-style:italic;">Henüz medya eklenmedi</li>';
+                playlistEl.innerHTML = '<li style="color:#666;font-style:italic;">No media added yet</li>';
                 updatePlaylistInfo();
                 return;
             }
@@ -724,7 +955,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                 <span class="name" title="${item.name}">${item.name}</span>
                 <span class="type ${item.type}">${item.type === 'image' ? 'img' : 'vid'}</span>
                 <span class="duration">${(item.duration/1000).toFixed(1)}s</span>
-                <button class="delete-btn" onclick="deleteItem(${i})" title="Bu öğeyi sil">🗑</button>
+                <button class="delete-btn" onclick="deleteItem(${i})" title="Delete this item">🗑</button>
             </li>
         `).join('');
 
@@ -740,7 +971,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             const item = mediaItems[index];
             
             // Show confirmation dialog in Windows 95 style
-            if (!confirm(`"${item.name}" dosyasını listeden silmek istediğinizden emin misiniz?`)) {
+            if (!confirm(`Are you sure you want to remove "${item.name}" from the list?`)) {
                 return;
             }
             
@@ -775,6 +1006,8 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             items.forEach(item => {
                 item.addEventListener('dragstart', handleDragStart);
                 item.addEventListener('dragover', handleDragOver);
+                item.addEventListener('dragenter', handleDragEnter);
+                item.addEventListener('dragleave', handleDragLeave);
                 item.addEventListener('drop', handleDrop);
                 item.addEventListener('dragend', handleDragEnd);
                 
@@ -786,6 +1019,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                     });
                 }
             });
+            
+            // Also add listeners to the playlist container for dropping between items
+            playlistEl.addEventListener('dragover', handlePlaylistDragOver);
+            playlistEl.addEventListener('drop', handlePlaylistDrop);
         }
 
         /* ---------- Enhanced Drag Handlers (prevent delete during drag) ---------- */
@@ -808,6 +1045,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         function handleDragEnd(e) {
             e.currentTarget.style.opacity = '';
             e.currentTarget.style.borderTop = '';
+            e.currentTarget.style.backgroundColor = '';
             draggedIndex = null;
 
             // Re-enable delete buttons after drag
@@ -815,10 +1053,84 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                 btn.style.pointerEvents = 'auto';
             });
 
-            // Clear all border highlights
+            // Clear all visual effects from all playlist items
             playlistEl.querySelectorAll('li').forEach(li => {
                 li.style.borderTop = '';
+                li.style.backgroundColor = '';
             });
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            
+            // Add visual feedback for drop target
+            const dragOverIndex = parseInt(e.currentTarget.dataset.index);
+            if (draggedIndex !== null && draggedIndex !== dragOverIndex) {
+                e.currentTarget.style.borderTop = '2px solid #0078d4';
+            }
+        }
+
+        function handleDragEnter(e) {
+            e.preventDefault();
+            if (draggedIndex !== null) {
+                e.currentTarget.style.backgroundColor = 'rgba(0, 120, 212, 0.1)';
+            }
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.currentTarget.style.backgroundColor = '';
+            e.currentTarget.style.borderTop = '';
+        }
+
+        function handlePlaylistDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function handlePlaylistDrop(e) {
+            e.preventDefault();
+            
+            if (draggedIndex === null) return;
+            
+            // If dropped on the playlist but not on a specific item, move to end
+            if (!e.target.closest('li[draggable]')) {
+                const draggedItem = mediaItems[draggedIndex];
+                mediaItems.splice(draggedIndex, 1);
+                mediaItems.push(draggedItem);
+                
+                // Update the playlist display
+                renderPlaylist();
+                
+                // Save to local storage
+                saveLocal();
+            }
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (draggedIndex === null) return;
+            
+            const dropIndex = parseInt(e.currentTarget.dataset.index);
+            
+            if (draggedIndex === dropIndex) return;
+            
+            // Reorder the mediaItems array
+            const draggedItem = mediaItems[draggedIndex];
+            mediaItems.splice(draggedIndex, 1);
+            
+            // Adjust drop index if we removed an item before it
+            const newDropIndex = draggedIndex < dropIndex ? dropIndex - 1 : dropIndex;
+            mediaItems.splice(newDropIndex, 0, draggedItem);
+            
+            // Update the playlist display
+            renderPlaylist();
+            
+            // Save to local storage
+            saveLocal();
         }
 
         /* ---------- Local persistence ---------- */
@@ -833,14 +1145,78 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             } catch (_) { }
         }
 
-        /* ---------- Media loading ---------- */
+        /* ---------- Audio Management ---------- */
+        async function addAudioFiles(fileList) {
+            const items = Array.from(fileList);
+            let addedCount = 0;
+            
+            for (const f of items) {
+                if (!validateAudioFile(f)) {
+                    systemSounds.error();
+                    const msg = `Invalid audio file: ${f.name} (type: ${f.type}, size: ${(f.size / (1024 * 1024)).toFixed(1)}MB)`;
+                    document.getElementById('status').textContent = msg;
+                    setTimeout(() => { if (document.getElementById('status').textContent === msg) document.getElementById('status').textContent = ''; }, 5000);
+                    continue;
+                }
+                
+                const url = URL.createObjectURL(f);
+                audioItems.push({ name: f.name, url });
+                addedCount++;
+            }
+            
+            if (addedCount > 0) {
+                systemSounds.open();
+                loadAudioPlaylist();
+            }
+        }
+
+        function loadAudioPlaylist() {
+            if (audioItems.length === 0) return;
+            
+            const audioPlayer = document.getElementById('audioPlayer');
+            const backgroundAudio = document.getElementById('backgroundAudio');
+            const audioTitle = document.getElementById('audioTitle');
+            
+            // Load first audio file
+            if (!currentAudio) {
+                currentAudio = audioItems[0];
+                backgroundAudio.src = currentAudio.url;
+                audioTitle.textContent = currentAudio.name;
+                audioPlayer.style.display = 'block';
+            }
+            
+            // Set up audio cycling through playlist
+            backgroundAudio.addEventListener('ended', () => {
+                const currentIndex = audioItems.findIndex(item => item.url === currentAudio.url);
+                const nextIndex = (currentIndex + 1) % audioItems.length;
+                currentAudio = audioItems[nextIndex];
+                backgroundAudio.src = currentAudio.url;
+                audioTitle.textContent = currentAudio.name;
+                backgroundAudio.play();
+            });
+        }
+
+        function clearAudio() {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const backgroundAudio = document.getElementById('backgroundAudio');
+            
+            backgroundAudio.pause();
+            backgroundAudio.src = '';
+            audioItems = [];
+            currentAudio = null;
+            audioPlayer.style.display = 'none';
+            document.getElementById('audioTitle').textContent = 'No audio selected';
+        }
+
+        /* ---------- Media loading (visual only) ---------- */
         function durationMs() { return parseFloat(document.getElementById('speed').value) * 1000; }
 
         async function addFiles(fileList) {
             const items = Array.from(fileList);
             for (const f of items) {
                 if (!validateFile(f)) {
-                    const msg = `Geçersiz dosya: ${f.name} (tip: ${f.type}, boyut: ${(f.size / (1024 * 1024)).toFixed(1)}MB)`;
+                    systemSounds.error(); // Play error sound
+                    const msg = `Invalid file: ${f.name} (type: ${f.type}, size: ${(f.size / (1024 * 1024)).toFixed(1)}MB)`;
                     document.getElementById('status').textContent = msg;
                     setTimeout(() => { if (document.getElementById('status').textContent === msg) document.getElementById('status').textContent = ''; }, 5000);
                     continue;
@@ -849,6 +1225,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                 const type = f.type.startsWith('video') ? 'video' : 'image';
                 mediaItems.push({ name: f.name, type, url, duration: durationMs() });
             }
+            if (items.length > 0) systemSounds.open(); // Play success sound for added files
             saveLocal(); renderPlaylist();
         }
 
@@ -883,7 +1260,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             
             const item = mediaItems[currentIndex++];
             createWindow(item, currentIndex - 1);
-            const delay = item.type === 'image' ? item.duration : 4000;
+            const delay = item.type === 'image' ? item.duration : 4000; // video default
             setTimeout(openNext, delay);
         }
 
@@ -950,9 +1327,15 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         /* ---------- Wire up ---------- */
         document.getElementById('addBtn').onclick = () => document.getElementById('filePicker').click();
         document.getElementById('filePicker').onchange = (e) => addFiles(e.target.files);
+        document.getElementById('audioBtn').onclick = () => document.getElementById('audioPicker').click();
+        document.getElementById('audioPicker').onchange = (e) => addAudioFiles(e.target.files);
+        document.getElementById('clearAudio').onclick = clearAudio;
         document.getElementById('demoBtn').onclick = loadDemo;
         document.getElementById('textBtn').onclick = toggleTextWindow;
-        document.getElementById('startBtn').onclick = start;
+        document.getElementById('startBtn').onclick = () => {
+            systemSounds.start(); // Play start sound
+            start();
+        };
         document.getElementById('resetBtn').onclick = reset;
         document.getElementById('recBtn').onclick = toggleRecording;
 
@@ -1038,9 +1421,9 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             const visibleItems = Math.floor(visibleHeight / itemHeight);
 
             if (totalItems > visibleItems) {
-                infoEl.textContent = `${visibleItems}/${totalItems} görünür - kaydır`;
+                infoEl.textContent = `${visibleItems}/${totalItems} visible - scroll`;
             } else if (totalItems > 0) {
-                infoEl.textContent = `${totalItems} öğe`;
+                infoEl.textContent = `${totalItems} items`;
             } else {
                 infoEl.textContent = '';
             }
@@ -1139,7 +1522,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                     </div>
                 </div>
                 <div class="text-content">
-                    <textarea placeholder="Performansınız için buraya yazın... Kayıt sırasında canlı olarak yazabilirsiniz." 
+                    <textarea placeholder="Write here for your performance... You can type live during recording." 
                               id="performanceText" 
                               spellcheck="false"></textarea>
                 </div>
@@ -1212,7 +1595,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                     const textarea = document.getElementById('performanceText');
                     if (textarea && document.activeElement === textarea) {
                         e.preventDefault();
-                        if (confirm('Metni temizlemek istediğinizden emin misiniz?')) {
+                        if (confirm('Are you sure you want to clear the text?')) {
                             textarea.value = '';
                             textarea.focus();
                         }
