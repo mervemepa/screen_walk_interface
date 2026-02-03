@@ -229,7 +229,41 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         .window-content {
             padding: 8px;
             background: #c0c0c0;
-            border-top: 1px solid #808080
+            border-top: 1px solid #808080;
+            position: relative;
+        }
+
+        /* Resize handles */
+        .resize-handle {
+            position: absolute;
+            background: transparent;
+            z-index: 10;
+        }
+
+        .resize-handle.bottom-right {
+            bottom: 0;
+            right: 0;
+            width: 16px;
+            height: 16px;
+            cursor: se-resize;
+        }
+
+        .resize-handle.bottom {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 8px;
+            cursor: s-resize;
+        }
+
+        .resize-handle.right {
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 20px;
+            cursor: e-resize;
         }
 
         .window-content img,
@@ -869,11 +903,33 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             window.style.height = px(Math.round(finalWindowHeight));
         }
 
+        /* ---------- Window Focusing ---------- */
+        let highestZIndex = 1000;
+
+        function focusWindow(windowElement) {
+            // Remove focus from all windows
+            document.querySelectorAll('.window.focused').forEach(win => {
+                win.classList.remove('focused');
+            });
+            
+            // Add focus to clicked window
+            windowElement.classList.add('focused');
+            windowElement.style.zIndex = ++highestZIndex;
+        }
+
+        function addWindowFocus(windowElement) {
+            windowElement.addEventListener('mousedown', (e) => {
+                // Don't focus if clicking on window controls
+                if (e.target.closest('.window-controls')) return;
+                focusWindow(windowElement);
+            });
+        }
+
         /* ---------- Window Resizing ---------- */
-        let isResizing = false;
-        let currentWindow = null;
-        let currentHandle = null;
-        let startX, startY, startWidth, startHeight;
+        let windowResizing = false;
+        let currentResizeWindow = null;
+        let currentResizeHandle = null;
+        let resizeStartX, resizeStartY, resizeStartWidth, resizeStartHeight;
 
         function addResizeHandles(windowElement) {
             const content = windowElement.querySelector('.window-content');
@@ -902,13 +958,13 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         }
 
         function startResize(e, windowElement, handleType) {
-            isResizing = true;
-            currentWindow = windowElement;
-            currentHandle = handleType;
-            startX = e.clientX;
-            startY = e.clientY;
-            startWidth = parseInt(windowElement.style.width) || windowElement.offsetWidth;
-            startHeight = parseInt(windowElement.style.height) || windowElement.offsetHeight;
+            windowResizing = true;
+            currentResizeWindow = windowElement;
+            currentResizeHandle = handleType;
+            resizeStartX = e.clientX;
+            resizeStartY = e.clientY;
+            resizeStartWidth = parseInt(windowElement.style.width) || windowElement.offsetWidth;
+            resizeStartHeight = parseInt(windowElement.style.height) || windowElement.offsetHeight;
             
             document.addEventListener('mousemove', doResize);
             document.addEventListener('mouseup', stopResize);
@@ -917,36 +973,36 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         }
 
         function doResize(e) {
-            if (!isResizing || !currentWindow) return;
+            if (!windowResizing || !currentResizeWindow) return;
             
-            const deltaX = e.clientX - startX;
-            const deltaY = e.clientY - startY;
+            const deltaX = e.clientX - resizeStartX;
+            const deltaY = e.clientY - resizeStartY;
             
-            let newWidth = startWidth;
-            let newHeight = startHeight;
+            let newWidth = resizeStartWidth;
+            let newHeight = resizeStartHeight;
             
-            if (currentHandle.includes('right')) {
-                newWidth = Math.max(200, startWidth + deltaX);
+            if (currentResizeHandle.includes('right')) {
+                newWidth = Math.max(200, resizeStartWidth + deltaX);
             }
-            if (currentHandle.includes('bottom')) {
-                newHeight = Math.max(150, startHeight + deltaY);
+            if (currentResizeHandle.includes('bottom')) {
+                newHeight = Math.max(150, resizeStartHeight + deltaY);
             }
             
             // Apply new dimensions
-            currentWindow.style.width = px(newWidth);
-            currentWindow.style.height = px(newHeight);
+            currentResizeWindow.style.width = px(newWidth);
+            currentResizeWindow.style.height = px(newHeight);
             
             // Resize media content proportionally
-            const mediaElement = currentWindow.querySelector('img, video');
+            const mediaElement = currentResizeWindow.querySelector('img, video');
             if (mediaElement) {
                 resizeMediaToWindow(mediaElement, newWidth, newHeight);
             }
         }
 
         function stopResize() {
-            isResizing = false;
-            currentWindow = null;
-            currentHandle = null;
+            windowResizing = false;
+            currentResizeWindow = null;
+            currentResizeHandle = null;
             document.removeEventListener('mousemove', doResize);
             document.removeEventListener('mouseup', stopResize);
             document.body.style.cursor = '';
@@ -1130,6 +1186,15 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
 
             const titlebar = win.querySelector('.window-titlebar');
             makeDraggable(win, titlebar);
+            
+            // Add resize handles
+            addResizeHandles(win);
+            
+            // Add window focusing
+            addWindowFocus(win);
+            
+            // Focus this new window
+            focusWindow(win);
 
             // Window controls
             win.querySelector('.window-controls').addEventListener('click', (e) => {
