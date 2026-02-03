@@ -235,11 +235,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         .window-content img,
         .window-content video {
             display: block;
-            max-width: 100%;
-            max-height: 420px;
             border: 1px inset #c0c0c0;
             padding: 2px;
-            background: #e6e6e6
+            background: #e6e6e6;
+            object-fit: contain;
         }
 
         /* Audio player styles */
@@ -787,6 +786,216 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             return file.size <= maxSize && file.type.startsWith('audio/');
         }
 
+        /* ---------- Dynamic Window Sizing ---------- */
+        function resizeWindowToContent(mediaElement) {
+            const window = mediaElement.closest('.window');
+            if (!window) return;
+            
+            const titlebarHeight = 18;
+            const contentPadding = 16;
+            const borderWidth = 4;
+            
+            // Define maximum window dimensions - smaller for better UX
+            const maxWindowWidth = 450;
+            const maxWindowHeight = 350;
+            const minWindowWidth = 200;
+            const minWindowHeight = 150;
+            
+            let mediaWidth, mediaHeight;
+            
+            if (mediaElement.tagName === 'IMG') {
+                const naturalWidth = mediaElement.naturalWidth || 320;
+                const naturalHeight = mediaElement.naturalHeight || 240;
+                const aspectRatio = naturalWidth / naturalHeight;
+                
+                // Calculate maximum content area (window size minus chrome)
+                const maxContentWidth = maxWindowWidth - contentPadding - borderWidth;
+                const maxContentHeight = maxWindowHeight - titlebarHeight - contentPadding - borderWidth;
+                
+                // Scale down if too large, but don't scale up small images too much
+                if (naturalWidth > maxContentWidth || naturalHeight > maxContentHeight) {
+                    if (naturalWidth / maxContentWidth > naturalHeight / maxContentHeight) {
+                        mediaWidth = maxContentWidth;
+                        mediaHeight = maxContentWidth / aspectRatio;
+                    } else {
+                        mediaHeight = maxContentHeight;
+                        mediaWidth = maxContentHeight * aspectRatio;
+                    }
+                } else {
+                    // Use natural size but ensure minimum
+                    mediaWidth = Math.max(naturalWidth, 150);
+                    mediaHeight = Math.max(naturalHeight, 100);
+                }
+                
+            } else if (mediaElement.tagName === 'VIDEO') {
+                const videoWidth = mediaElement.videoWidth || 320;
+                const videoHeight = mediaElement.videoHeight || 240;
+                const aspectRatio = videoWidth / videoHeight;
+                
+                const maxContentWidth = maxWindowWidth - contentPadding - borderWidth;
+                const maxContentHeight = maxWindowHeight - titlebarHeight - contentPadding - borderWidth;
+                
+                // For videos, always scale to fit within reasonable size regardless of original dimensions
+                if (videoWidth / maxContentWidth > videoHeight / maxContentHeight) {
+                    mediaWidth = maxContentWidth;
+                    mediaHeight = maxContentWidth / aspectRatio;
+                } else {
+                    mediaHeight = maxContentHeight;
+                    mediaWidth = maxContentHeight * aspectRatio;
+                }
+                
+                // Ensure minimum video size for visibility
+                if (mediaWidth < 240) {
+                    mediaWidth = 240;
+                    mediaHeight = 240 / aspectRatio;
+                }
+                if (mediaHeight < 180) {
+                    mediaHeight = 180;
+                    mediaWidth = 180 * aspectRatio;
+                }
+            }
+            
+            // Set the media element size explicitly
+            mediaElement.style.width = px(Math.round(mediaWidth));
+            mediaElement.style.height = px(Math.round(mediaHeight));
+            mediaElement.style.maxWidth = 'none';
+            mediaElement.style.maxHeight = 'none';
+            
+            // Calculate final window size
+            const finalWindowWidth = Math.min(Math.max(mediaWidth + contentPadding + borderWidth, minWindowWidth), maxWindowWidth);
+            const finalWindowHeight = Math.min(Math.max(mediaHeight + titlebarHeight + contentPadding + borderWidth, minWindowHeight), maxWindowHeight);
+            
+            window.style.width = px(Math.round(finalWindowWidth));
+            window.style.height = px(Math.round(finalWindowHeight));
+        }
+
+        /* ---------- Window Resizing ---------- */
+        let isResizing = false;
+        let currentWindow = null;
+        let currentHandle = null;
+        let startX, startY, startWidth, startHeight;
+
+        function addResizeHandles(windowElement) {
+            const content = windowElement.querySelector('.window-content');
+            if (!content) return;
+
+            // Create resize handles
+            const handles = [
+                { class: 'bottom-right', cursor: 'se-resize' },
+                { class: 'bottom', cursor: 's-resize' },
+                { class: 'right', cursor: 'e-resize' }
+            ];
+
+            handles.forEach(handleInfo => {
+                const handle = document.createElement('div');
+                handle.className = `resize-handle ${handleInfo.class}`;
+                handle.style.cursor = handleInfo.cursor;
+                
+                handle.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    startResize(e, windowElement, handleInfo.class);
+                });
+                
+                content.appendChild(handle);
+            });
+        }
+
+        function startResize(e, windowElement, handleType) {
+            isResizing = true;
+            currentWindow = windowElement;
+            currentHandle = handleType;
+            startX = e.clientX;
+            startY = e.clientY;
+            startWidth = parseInt(windowElement.style.width) || windowElement.offsetWidth;
+            startHeight = parseInt(windowElement.style.height) || windowElement.offsetHeight;
+            
+            document.addEventListener('mousemove', doResize);
+            document.addEventListener('mouseup', stopResize);
+            document.body.style.cursor = getResizeCursor(handleType);
+            document.body.style.userSelect = 'none';
+        }
+
+        function doResize(e) {
+            if (!isResizing || !currentWindow) return;
+            
+            const deltaX = e.clientX - startX;
+            const deltaY = e.clientY - startY;
+            
+            let newWidth = startWidth;
+            let newHeight = startHeight;
+            
+            if (currentHandle.includes('right')) {
+                newWidth = Math.max(200, startWidth + deltaX);
+            }
+            if (currentHandle.includes('bottom')) {
+                newHeight = Math.max(150, startHeight + deltaY);
+            }
+            
+            // Apply new dimensions
+            currentWindow.style.width = px(newWidth);
+            currentWindow.style.height = px(newHeight);
+            
+            // Resize media content proportionally
+            const mediaElement = currentWindow.querySelector('img, video');
+            if (mediaElement) {
+                resizeMediaToWindow(mediaElement, newWidth, newHeight);
+            }
+        }
+
+        function stopResize() {
+            isResizing = false;
+            currentWindow = null;
+            currentHandle = null;
+            document.removeEventListener('mousemove', doResize);
+            document.removeEventListener('mouseup', stopResize);
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+        }
+
+        function getResizeCursor(handleType) {
+            switch(handleType) {
+                case 'bottom-right': return 'se-resize';
+                case 'bottom': return 's-resize';
+                case 'right': return 'e-resize';
+                default: return 'default';
+            }
+        }
+
+        function resizeMediaToWindow(mediaElement, windowWidth, windowHeight) {
+            const titlebarHeight = 18;
+            const contentPadding = 16;
+            const borderWidth = 4;
+            
+            const availableWidth = windowWidth - contentPadding - borderWidth;
+            const availableHeight = windowHeight - titlebarHeight - contentPadding - borderWidth;
+            
+            if (mediaElement.tagName === 'IMG') {
+                const aspectRatio = mediaElement.naturalWidth / mediaElement.naturalHeight;
+                
+                if (availableWidth / aspectRatio <= availableHeight) {
+                    mediaElement.style.width = px(availableWidth);
+                    mediaElement.style.height = px(availableWidth / aspectRatio);
+                } else {
+                    mediaElement.style.height = px(availableHeight);
+                    mediaElement.style.width = px(availableHeight * aspectRatio);
+                }
+            } else if (mediaElement.tagName === 'VIDEO') {
+                const aspectRatio = (mediaElement.videoWidth || 16) / (mediaElement.videoHeight || 9);
+                
+                if (availableWidth / aspectRatio <= availableHeight) {
+                    mediaElement.style.width = px(availableWidth);
+                    mediaElement.style.height = px(availableWidth / aspectRatio);
+                } else {
+                    mediaElement.style.height = px(availableHeight);
+                    mediaElement.style.width = px(availableHeight * aspectRatio);
+                }
+            }
+            
+            mediaElement.style.maxWidth = 'none';
+            mediaElement.style.maxHeight = 'none';
+        }
+
         /* ---------- Chaotic random layout ---------- */
         function generateChaoticPosition(index, total) {
             const screenWidth = window.innerWidth;
@@ -890,20 +1099,17 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         function createWindow(item, index) {
             const desktop = document.getElementById('desktop');
             const win = document.createElement('div');
-            const size = getChaoticSize();
-            win.className = `window ${size.className}`;
+            win.className = 'window';
             win.id = `window-${index}-${Date.now()}`; // Make unique for loops
 
-            const pos = generateChaoticPosition(index % mediaItems.length, mediaItems.length); // Use modulo for position
+            const pos = generateChaoticPosition(index % mediaItems.length, mediaItems.length);
             win.style.left = px(pos.x); 
             win.style.top = px(pos.y);
-            win.style.width = px(size.width);
-            win.style.height = px(size.height);
             win.style.zIndex = 100 + Math.floor(rnd() * 50); // Random z-index for more chaos
 
             const content = item.type === 'image'
-                ? `<img src="${item.url}" alt="${item.name}" />`
-                : `<video controls autoplay muted playsinline>
+                ? `<img src="${item.url}" alt="${item.name}" onload="resizeWindowToContent(this)" />`
+                : `<video controls autoplay muted playsinline onloadedmetadata="resizeWindowToContent(this)">
              <source src="${item.url}" type="video/mp4">
            </video>`;
 
