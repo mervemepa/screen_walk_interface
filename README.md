@@ -2,7 +2,7 @@
 
 A web-based visual performance tool for creating dynamic desktop compositions with images, videos, PDFs, audio, and live text. Built with a Windows 95 aesthetic, Screen Walk enables artists and performers to orchestrate multi-window presentations with precise control over timing, layout, and media playback.
 
-![Screen Walk Interface](screenshot.png)
+![Screen Walk Interface](materials/screenshot.png)
 
 ## License
 
