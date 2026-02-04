@@ -1000,6 +1000,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         let pdfItems = [];         // {name, url} - PDF documents
         let currentPdf = null;     // currently loaded PDF
         let pdfWindow = null;      // PDF viewer window
+        let isPdfWindowOpen = false; // PDF window front/back state
         let isRunning = false;
         let currentIndex = 0;
         let openWindows = [];
@@ -1757,7 +1758,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             
             pdfWindow.style.left = px(x);
             pdfWindow.style.top = px(y);
-            pdfWindow.style.zIndex = 200;
+            pdfWindow.style.zIndex = 9999;
             
             pdfWindow.innerHTML = `
                 <div class="window-titlebar">
@@ -1798,12 +1799,16 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             pdfWindow.querySelector('.window-controls').addEventListener('click', (e) => {
                 const act = e.target.getAttribute('data-act');
                 if (act === 'close') {
-                    closePdfWindow();
+                    sendPdfToBack();
                 }
                 if (act === 'min') {
                     pdfWindow.style.opacity = pdfWindow.style.opacity === '0.3' ? '1' : '0.3';
                 }
             });
+            
+            isPdfWindowOpen = true;
+            const btn = document.getElementById('pdfBtn');
+            btn.textContent = 'Send Back';
             
             document.getElementById('status').textContent = 'PDF window opened.';
         }
@@ -2026,6 +2031,30 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             updateTransform();
         }
         
+        function sendPdfToBack() {
+            if (pdfWindow) {
+                pdfWindow.style.zIndex = '50'; // Send to back
+            }
+
+            isPdfWindowOpen = false;
+            const btn = document.getElementById('pdfBtn');
+            btn.textContent = 'Upload PDF';
+
+            document.getElementById('status').textContent = 'PDF window sent to back.';
+        }
+        
+        function bringPdfToFront() {
+            if (pdfWindow) {
+                pdfWindow.style.zIndex = '9999'; // Bring to front
+            }
+
+            isPdfWindowOpen = true;
+            const btn = document.getElementById('pdfBtn');
+            btn.textContent = 'Send Back';
+
+            document.getElementById('status').textContent = 'PDF window brought to front.';
+        }
+        
         function closePdfWindow() {
             if (pdfWindow) {
                 pdfWindow.style.transform = 'scale(0.8)';
@@ -2039,6 +2068,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                 }, 200);
             }
             
+            isPdfWindowOpen = false;
+            const btn = document.getElementById('pdfBtn');
+            btn.textContent = 'Upload PDF';
+
             document.getElementById('status').textContent = 'PDF window closed.';
         }
         
@@ -2174,7 +2207,19 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         document.getElementById('audioBtn').onclick = () => document.getElementById('audioPicker').click();
         document.getElementById('audioPicker').onchange = (e) => addAudioFiles(e.target.files);
         document.getElementById('clearAudio').onclick = clearAudio;
-        document.getElementById('pdfBtn').onclick = () => document.getElementById('pdfPicker').click();
+        document.getElementById('pdfBtn').onclick = () => {
+            if (pdfWindow) {
+                // If window exists, toggle front/back
+                if (isPdfWindowOpen) {
+                    sendPdfToBack();
+                } else {
+                    bringPdfToFront();
+                }
+            } else {
+                // If no window, open file picker
+                document.getElementById('pdfPicker').click();
+            }
+        };
         document.getElementById('pdfPicker').onchange = (e) => addPdfFiles(e.target.files);
         document.getElementById('clearPdf').onclick = clearPdf;
         document.getElementById('textBtn').onclick = toggleTextWindow;
@@ -2490,6 +2535,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                     <ul>
                         <li><strong>Upload Media:</strong> Click to add images and videos</li>
                         <li><strong>Drag & Drop:</strong> Drag files directly onto the desktop</li>
+                        <li><strong>Auto-Sizing:</strong> Images and videos open with their original aspect ratio preserved</li>
                     </ul>
                     
                     <h3>2. Configure Playback</h3>
@@ -2501,9 +2547,9 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                     
                     <h3>3. Start Performance</h3>
                     <ul>
-                        <li><strong>▶ Start:</strong> Begin the visual performance (loops continuously)</li>
-                        <li><strong>🔄 Reset:</strong> Close all windows and stop</li>
-                        <li><strong>⏺ Record:</strong> Capture your screen (requires screen sharing permission)</li>
+                        <li><strong>Start:</strong> Begin the visual performance (loops continuously)</li>
+                        <li><strong>Reset:</strong> Close all windows and stop</li>
+                        <li><strong>Record:</strong> Capture your screen (requires screen sharing permission)</li>
                     </ul>
                     
                     <h2>Additional Features</h2>
@@ -2518,16 +2564,29 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                     <h3>PDF Viewer</h3>
                     <ul>
                         <li>Upload PDF documents to view alongside your performance</li>
+                        <li><strong>Toggle:</strong> Click button again to send PDF to back/bring to front</li>
                         <li><strong>Zoom:</strong> Use + and - buttons, or <span class="shortcut">Ctrl + scroll wheel</span></li>
                         <li><strong>Pan:</strong> When zoomed in, click and drag to move around</li>
                         <li><strong>Reset:</strong> Click "1:1" button or press <span class="shortcut">Ctrl+0</span></li>
+                        <li><strong>Persistent:</strong> PDF window stays open, toggles between front/back</li>
                     </ul>
                     
-                    <h3>Live Text Performance</h3>
+                    <h3>Live Text Box</h3>
                     <ul>
-                        <li><strong>Text:</strong> Open a notepad for live typing during recording</li>
+                        <li><strong>Live Text Box:</strong> Opens a notepad for live typing during recording</li>
+                        <li><strong>Always on Top:</strong> Text box stays on top when opened</li>
+                        <li><strong>Send Back:</strong> Click button to send text box behind other windows</li>
+                        <li><strong>Bring Front:</strong> Click again to bring text box back to front</li>
+                        <li><strong>Persistent:</strong> Text box stays open, toggles between front/back</li>
                         <li>Type thoughts, poetry, or annotations in real-time</li>
                         <li>Window can be moved and resized</li>
+                    </ul>
+                    
+                    <h3>Control Panel Management</h3>
+                    <ul>
+                        <li><strong>Always Accessible:</strong> Click the control panel to bring it to front</li>
+                        <li><strong>Safe Zone:</strong> Media windows automatically avoid the control panel area</li>
+                        <li><strong>Responsive:</strong> Layout adjusts to browser window size</li>
                     </ul>
                     
                     <h2>Keyboard Shortcuts</h2>
@@ -2551,7 +2610,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                         <ul>
                             <li>Use Chrome browser for best recording results</li>
                             <li>Recording saves as WEBM - convert to MP4 with ffmpeg if needed</li>
-                            <li>Start recording before clicking "▶ Start" for complete capture</li>
+                            <li>Start recording before clicking "Start" for complete capture</li>
                         </ul>
                     </div>
                     
@@ -2560,6 +2619,8 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                         <ul>
                             <li>Combine images, PDFs, and live text for rich performances</li>
                             <li>Add background audio to create atmosphere</li>
+                            <li>Text box and PDF stay on top - toggle them to back when needed</li>
+                            <li>Click control panel if it gets hidden behind windows</li>
                             <li>Experiment with different durations and max windows settings</li>
                             <li>Windows loop continuously - perfect for installations</li>
                         </ul>
