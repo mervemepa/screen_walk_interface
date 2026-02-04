@@ -294,12 +294,13 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             background: #c0c0c0;
             border: 2px outset #c0c0c0;
             padding: 10px;
-            z-index: 1002;
+            z-index: 10000;
             width: 240px;
             min-width: 200px;
             max-width: 600px;
             resize: horizontal;
             overflow: auto;
+            cursor: move;
         }
 
         .controls h3 {
@@ -1078,8 +1079,44 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
 
         /* ---------- Dynamic Window Sizing ---------- */
         function fitMediaToRandomWindow(mediaElement) {
-            // Let CSS handle scaling with width: 100%, height: 100% and object-fit: contain
-            // This ensures media fills the randomly-sized window content area
+            // Calculate window size based on media's natural dimensions
+            const windowElement = mediaElement.closest('.window');
+            if (!windowElement) return;
+            
+            const naturalWidth = mediaElement.videoWidth || mediaElement.naturalWidth;
+            const naturalHeight = mediaElement.videoHeight || mediaElement.naturalHeight;
+            
+            if (!naturalWidth || !naturalHeight) return;
+            
+            // Get original aspect ratio
+            const aspectRatio = naturalWidth / naturalHeight;
+            
+            // Get current window content dimensions
+            const content = windowElement.querySelector('.window-content');
+            const titlebar = windowElement.querySelector('.window-titlebar');
+            const titlebarHeight = titlebar ? titlebar.offsetHeight : 24;
+            
+            // Calculate target size (scale down if too large, but maintain aspect ratio)
+            const maxWidth = 800;
+            const maxHeight = 600;
+            
+            let targetWidth = naturalWidth;
+            let targetHeight = naturalHeight;
+            
+            // Scale down if larger than max
+            if (targetWidth > maxWidth) {
+                targetWidth = maxWidth;
+                targetHeight = targetWidth / aspectRatio;
+            }
+            
+            if (targetHeight > maxHeight) {
+                targetHeight = maxHeight;
+                targetWidth = targetHeight * aspectRatio;
+            }
+            
+            // Apply size to window (add titlebar height)
+            windowElement.style.width = Math.round(targetWidth) + 'px';
+            windowElement.style.height = Math.round(targetHeight + titlebarHeight) + 'px';
         }
 
         /* ---------- Window Focusing ---------- */
@@ -1207,44 +1244,61 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight - 60; // taskbar
             
+            // Calculate safe zone boundaries (avoiding control panel on right)
+            const controlsPanelWidth = 280; // Width of controls panel + padding
+            const leftPadding = 20;
+            const topPadding = 20;
+            const rightPadding = controlsPanelWidth; // Reserve space for controls
+            
+            // Safe area for media windows
+            const safeWidth = screenWidth - leftPadding - rightPadding;
+            const safeHeight = screenHeight - topPadding - 20; // bottom padding
+            
+            // Maximum window dimensions to fit in safe area
+            const maxWindowWidth = 720;
+            const maxWindowHeight = 600;
+            
             // Create clusters and scattered elements for organic feel
             const useCluster = rnd() < 0.4; // 40% chance for clustering
             
             if (useCluster && total > 3) {
-                // Create loose clusters around random points
-                const clusterCenterX = rnd() * (screenWidth * 0.6) + screenWidth * 0.2;
-                const clusterCenterY = rnd() * (screenHeight * 0.6) + screenHeight * 0.2;
+                // Create loose clusters around random points within safe area
+                const clusterCenterX = leftPadding + (rnd() * (safeWidth * 0.7));
+                const clusterCenterY = topPadding + (rnd() * (safeHeight * 0.7));
                 const scatterRange = 150 + rnd() * 200; // Random scatter range
                 
-                const x = Math.max(20, Math.min(
+                const x = Math.max(leftPadding, Math.min(
                     clusterCenterX + (rnd() - 0.5) * scatterRange,
-                    screenWidth - 420
+                    screenWidth - rightPadding - maxWindowWidth
                 ));
-                const y = Math.max(20, Math.min(
+                const y = Math.max(topPadding, Math.min(
                     clusterCenterY + (rnd() - 0.5) * scatterRange,
-                    screenHeight - 320
+                    screenHeight - maxWindowHeight
                 ));
                 
                 return { x, y };
             } else {
-                // Completely scattered positioning
-                const padding = 20;
-                const maxX = screenWidth - 420; // leave room for window width
-                const maxY = screenHeight - 320; // leave room for window height
+                // Completely scattered positioning within safe area
+                const maxX = screenWidth - rightPadding - maxWindowWidth;
+                const maxY = screenHeight - maxWindowHeight;
                 
                 // Use different random distributions for more organic feel
                 let x, y;
                 if (rnd() < 0.3) {
-                    // Sometimes prefer edges (30% chance)
+                    // Sometimes prefer edges (30% chance) - but within safe zone
+                    const edgeZone = Math.min(200, safeWidth * 0.3);
                     x = rnd() < 0.5 ? 
-                        padding + rnd() * 200 : // Left side
-                        maxX - 200 + rnd() * 200; // Right side
-                    y = padding + (rnd() * (maxY - padding));
+                        leftPadding + rnd() * edgeZone : // Left side of safe zone
+                        Math.max(leftPadding, maxX - edgeZone + rnd() * edgeZone); // Right side of safe zone
+                    y = topPadding + (rnd() * (maxY - topPadding));
                 } else {
-                    // Normal random distribution
-                    x = padding + (rnd() * (maxX - padding));
-                    y = padding + (rnd() * (maxY - padding));
+                    // Normal random distribution within safe area
+                    x = leftPadding + (rnd() * (maxX - leftPadding));
+                    y = topPadding + (rnd() * (maxY - topPadding));
                 }
+                
+                // Ensure x is never too far right (double check)
+                x = Math.min(x, screenWidth - rightPadding - 300);
                 
                 return { x, y };
             }
@@ -2274,6 +2328,13 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             initTextFeatures();
             loadLocal();
             renderPlaylist();
+            
+            // Make controls panel clickable to bring to front
+            const controlsPanel = document.querySelector('.controls');
+            let controlsZIndex = 10000;
+            controlsPanel.addEventListener('mousedown', () => {
+                controlsPanel.style.zIndex = ++controlsZIndex;
+            });
         });
 
         /* ---------- Text Performance Window ---------- */
@@ -2288,9 +2349,15 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             const btn = document.getElementById('textBtn');
             
             if (isTextWindowOpen) {
-                closeTextWindow();
+                // If window exists and is on top, send it to back
+                sendTextToBack();
             } else {
-                openTextWindow();
+                // If window doesn't exist, create it, or if it exists but in back, bring to front
+                if (textWindow) {
+                    bringTextToFront();
+                } else {
+                    openTextWindow();
+                }
             }
         }
         
@@ -2316,7 +2383,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             
             textWindow.style.left = px(x);
             textWindow.style.top = px(y);
-            textWindow.style.zIndex = 200;
+            textWindow.style.zIndex = 9999;
 
             textWindow.innerHTML = `
                 <div class="window-titlebar">
@@ -2343,7 +2410,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             textWindow.querySelector('.window-controls').addEventListener('click', (e) => {
                 const act = e.target.getAttribute('data-act');
                 if (act === 'close') {
-                    closeTextWindow();
+                    sendTextToBack();
                 }
                 if (act === 'min') {
                     textWindow.style.opacity = textWindow.style.opacity === '0.3' ? '1' : '0.3';
@@ -2359,30 +2426,35 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             isTextWindowOpen = true;
             const btn = document.getElementById('textBtn');
             btn.classList.add('active');
-            btn.textContent = '📝 Close';
+            btn.textContent = 'Send Back';
 
             document.getElementById('status').textContent = 'Text performance window opened.';
         }
 
-        function closeTextWindow() {
+        function sendTextToBack() {
             if (textWindow) {
-                textWindow.style.transform = 'scale(0.8)';
-                textWindow.style.opacity = '0';
-                
-                setTimeout(() => {
-                    if (textWindow) {
-                        textWindow.remove();
-                        textWindow = null;
-                    }
-                }, 200);
+                textWindow.style.zIndex = '50'; // Send to back
             }
 
             isTextWindowOpen = false;
             const btn = document.getElementById('textBtn');
             btn.classList.remove('active');
-            btn.textContent = '📝 Text';
+            btn.textContent = 'Live Text Box';
 
-            document.getElementById('status').textContent = 'Text performance window closed.';
+            document.getElementById('status').textContent = 'Text window sent to back.';
+        }
+        
+        function bringTextToFront() {
+            if (textWindow) {
+                textWindow.style.zIndex = '9999'; // Bring to front
+            }
+
+            isTextWindowOpen = true;
+            const btn = document.getElementById('textBtn');
+            btn.classList.add('active');
+            btn.textContent = 'Send Back';
+
+            document.getElementById('status').textContent = 'Text window brought to front.';
         }
         
         function openHelpWindow() {
