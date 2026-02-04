@@ -1,5 +1,5 @@
 <!--
-Desktop Documentary (c) 2026 Merve Mepa
+Screen Walk (c) 2026 Merve Mepa
 Licensed under CC BY-NC-ND 4.0 International
 Unauthorized use, modification, or redistribution is prohibited.
 https://creativecommons.org/licenses/by-nc-nd/4.0/
@@ -10,7 +10,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Desktop Documentary</title>
+    <title>Screen Walk</title>
     <style>
         :root {
             --teal: #008080;
@@ -303,9 +303,30 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         }
 
         .controls h3 {
-            margin: 0 0 8px 0;
+            margin: 0 0 12px 0;
             font-size: 12px;
-            color: #000080
+            color: #000080;
+            border-bottom: 1px solid #808080;
+            padding-bottom: 6px;
+        }
+
+        .section-group {
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #dfdfdf;
+        }
+
+        .section-group:last-child {
+            border-bottom: none;
+        }
+
+        .section-label {
+            font-size: 10px;
+            font-weight: bold;
+            color: #000080;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .btn {
@@ -899,19 +920,24 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
 
     <!-- Controls -->
     <div class="controls">
-        <h3>Desktop Documentary</h3>
-        <div class="row">
-            <button class="btn" id="addBtn">📥 Upload Media</button>
-            <button class="btn" id="demoBtn" title="Loads 5 sample images">✨ Demo</button>
-            <button class="btn text-btn" id="textBtn" title="Open text box for performance">📝 Text</button>
-            <button class="btn" id="helpBtn" title="Show instructions">❓ Help</button>
+        <h3>Screen Walk</h3>
+        
+        <!-- Media Upload Section -->
+        <div class="section-group">
+            <div class="section-label">Media</div>
+            <button class="btn block" id="addBtn">📥 Upload Media</button>
             <input type="file" id="filePicker" accept="image/*,video/*" multiple hidden />
+            
+            <div class="status" id="status">Add files to begin.</div>
+            <ul id="playlist"></ul>
+            <div class="playlist-info"></div>
+            <div class="hint">Drag & Resize</div>
         </div>
 
         <!-- Audio Section -->
-        <div class="audio-section">
-            <h4>🎵 Background Audio</h4>
-            <button class="btn audio-btn" id="audioBtn">🎵 Upload Audio</button>
+        <div class="section-group">
+            <div class="section-label">Audio</div>
+            <button class="btn block audio-btn" id="audioBtn">🎵 Upload Audio</button>
             <input type="file" id="audioPicker" accept="audio/*" multiple hidden />
             <div id="audioPlayer" class="audio-controls" style="display:none;">
                 <audio id="backgroundAudio" controls loop>
@@ -925,9 +951,9 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         </div>
 
         <!-- PDF Section -->
-        <div class="pdf-section">
-            <h4>📄 PDF Documents</h4>
-            <button class="btn pdf-btn" id="pdfBtn">📄 Upload PDF</button>
+        <div class="section-group">
+            <div class="section-label">PDF</div>
+            <button class="btn block pdf-btn" id="pdfBtn">📄 Upload PDF</button>
             <input type="file" id="pdfPicker" accept=".pdf,application/pdf" hidden />
             <div id="pdfInfo" class="pdf-info" style="display:none;">
                 <span id="pdfTitle">No PDF selected</span>
@@ -935,32 +961,41 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             </div>
         </div>
 
-        <div class="row">
-            <label for="speed">Duration (s):</label>
-            <input id="speed" type="range" min="1" max="8" step="0.5" value="3" />
-            <span id="speedVal" style="font-size:11px">3.0</span>
+        <!-- Settings Section -->
+        <div class="section-group">
+            <div class="section-label">Settings</div>
+            <div class="row">
+                <label for="speed">Duration (s):</label>
+                <input id="speed" type="range" min="1" max="8" step="0.5" value="3" />
+                <span id="speedVal" style="font-size:11px">3.0</span>
+            </div>
+
+            <div class="row">
+                <label for="maxWin">Max Windows:</label>
+                <input id="maxWin" type="range" min="3" max="20" step="1" value="8" />
+                <span id="maxWinVal" style="font-size:11px">8</span>
+            </div>
+
+            <div class="row">
+                <label for="seed">Random Seed:</label>
+                <input id="seed" type="number" value="" placeholder="optional" style="width:100%" />
+            </div>
         </div>
 
-        <div class="row">
-            <label for="maxWin">Max Windows:</label>
-            <input id="maxWin" type="range" min="3" max="20" step="1" value="8" />
-            <span id="maxWinVal" style="font-size:11px">8</span>
+        <!-- Actions Section -->
+        <div class="section-group">
+            <button class="btn block" id="startBtn">▶ Start</button>
+            <button class="btn block" id="resetBtn">🔄 Reset</button>
+            <button class="btn block rec" id="recBtn">⏺ Record</button>
         </div>
 
-        <div class="row">
-            <label for="seed">Random Seed:</label>
-            <input id="seed" type="number" value="" placeholder="optional" style="width:100%" />
+        <!-- Utility Section -->
+        <div class="section-group">
+            <div class="row">
+                <button class="btn" id="textBtn" title="Open text box for performance">📝 Text</button>
+                <button class="btn" id="helpBtn" title="Show instructions">❓ Info</button>
+            </div>
         </div>
-
-        <button class="btn block" id="startBtn">▶ Start</button>
-        <button class="btn block" id="resetBtn">🔄 Reset</button>
-        <button class="btn block rec" id="recBtn">⏺ Record</button>
-
-        <div class="status" id="status">Add files or press Demo.</div>
-
-        <ul id="playlist"></ul>
-        <div class="playlist-info"></div>
-        <div class="hint">Drag & Resize</div>
     </div>
 
     <!-- Taskbar -->
@@ -1424,7 +1459,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                 if (currentStatus === `"${item.name}" silindi.`) {
                     document.getElementById('status').textContent = mediaItems.length > 0 
                         ? `${mediaItems.length} öğe hazır.` 
-                        : 'Dosya ekle veya Demo\'ya bas.';
+                        : 'Dosya ekle.';
                 }
             }, 3000);
         }
@@ -2007,16 +2042,6 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             saveLocal(); renderPlaylist();
         }
 
-        /* Demo loader (picsum) */
-        async function loadDemo() {
-            const urls = [600, 601, 602, 603, 604].map(h => `https://picsum.photos/800/${h}`);
-            for (let i = 0; i < urls.length; i++) {
-                const url = urls[i];
-                mediaItems.push({ name: `demo_${i + 1}.jpg`, type: 'image', url, duration: durationMs() });
-            }
-            renderPlaylist();
-        }
-
         /* ---------- Documentary flow ---------- */
         function openNext() {
             if (!isRunning) return;
@@ -2111,7 +2136,6 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         document.getElementById('pdfBtn').onclick = () => document.getElementById('pdfPicker').click();
         document.getElementById('pdfPicker').onchange = (e) => addPdfFiles(e.target.files);
         document.getElementById('clearPdf').onclick = clearPdf;
-        document.getElementById('demoBtn').onclick = loadDemo;
         document.getElementById('textBtn').onclick = toggleTextWindow;
         document.getElementById('helpBtn').onclick = toggleHelpWindow;
         document.getElementById('startBtn').onclick = () => {
@@ -2392,21 +2416,20 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
 
             helpWindow.innerHTML = `
                 <div class="window-titlebar">
-                    <div class="window-title">❓ Desktop Documentary - Help & Instructions</div>
+                    <div class="window-title">❓ Screen Walk - Info & Instructions</div>
                     <div class="window-controls">
                         <div class="window-control" data-act="min">_</div>
                         <div class="window-control" data-act="close">×</div>
                     </div>
                 </div>
                 <div class="help-content">
-                    <h2>📖 Welcome to Desktop Documentary</h2>
-                    <p>Desktop Documentary is a creative tool for creating visual performances with images, videos, PDFs, audio, and live text. Windows appear randomly on your desktop in a chaotic, artistic layout.</p>
+                    <h2>Welcome to Screen Walk</h2>
+                    <p>Screen Walk is a fun tool for creating visual performances with images, videos, PDFs, audio, and live text. Windows appear randomly on your desktop in a chaotic layout.</p>
                     
-                    <h2>🎬 Getting Started</h2>
+                    <h2>Getting Started</h2>
                     <h3>1. Add Media Files</h3>
                     <ul>
-                        <li><strong>📥 Upload Media:</strong> Click to add images and videos</li>
-                        <li><strong>✨ Demo:</strong> Load 5 sample images to try it out</li>
+                        <li><strong>Upload Media:</strong> Click to add images and videos</li>
                         <li><strong>Drag & Drop:</strong> Drag files directly onto the desktop</li>
                     </ul>
                     
@@ -2424,7 +2447,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                         <li><strong>⏺ Record:</strong> Capture your screen (requires screen sharing permission)</li>
                     </ul>
                     
-                    <h2>🎵 Additional Features</h2>
+                    <h2>Additional Features</h2>
                     
                     <h3>Background Audio</h3>
                     <ul>
@@ -2443,12 +2466,12 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                     
                     <h3>Live Text Performance</h3>
                     <ul>
-                        <li><strong>📝 Text:</strong> Open a notepad for live typing during recording</li>
+                        <li><strong>Text:</strong> Open a notepad for live typing during recording</li>
                         <li>Type thoughts, poetry, or annotations in real-time</li>
                         <li>Window can be moved and resized</li>
                     </ul>
                     
-                    <h2>⌨️ Keyboard Shortcuts</h2>
+                    <h2>Keyboard Shortcuts</h2>
                     <ul>
                         <li><span class="shortcut">Ctrl+T</span> - Toggle text window</li>
                         <li><span class="shortcut">Ctrl + +</span> - Zoom in (PDF)</li>
@@ -2456,14 +2479,14 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                         <li><span class="shortcut">Ctrl + 0</span> - Reset zoom (PDF)</li>
                     </ul>
                     
-                    <h2>🎨 Playlist Management</h2>
+                    <h2>Playlist Management</h2>
                     <ul>
                         <li><strong>Reorder:</strong> Drag items using the ⋮⋮ handle</li>
                         <li><strong>Delete:</strong> Click 🗑 to remove individual items</li>
                         <li><strong>Resize:</strong> Drag the bottom-right corner of the playlist</li>
                     </ul>
                     
-                    <h2>💡 Tips & Tricks</h2>
+                    <h2>Tips & Tricks</h2>
                     <div class="note">
                         <strong>Recording Tips:</strong>
                         <ul>
@@ -2483,8 +2506,8 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                         </ul>
                     </div>
                     
-                    <h2>📝 About</h2>
-                    <p>Desktop Documentary © 2025 Merve Mepa</p>
+                    <h2>About</h2>
+                    <p>Screen Walk © 2026 Merve Mepa</p>
                     <p>Licensed under CC BY-NC-ND 4.0 International</p>
                 </div>
             `;
@@ -2557,7 +2580,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             if (!textarea) return;
             
             const templates = {
-                'intro': 'Bu benim desktop documentary performansım...\n\n',
+                'intro': 'Bu benim screen walk performansım...\n\n',
                 'poem': 'Ekranımda açılan pencereler,\nBir hikaye anlatıyor...\n\n',
                 'thoughts': 'Şu anda düşündüklerim:\n- \n- \n- \n\n'
             };
