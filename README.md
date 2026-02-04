@@ -1,386 +1,434 @@
-# Desktop Documentary - Complete User Guide
+# Screen Walk
 
-A nostalgic Windows 95-style web application for creating automated visual collages and live text performances. Transform your media collection into artistic desktop documentaries with authentic retro aesthetics.
+A web-based visual performance tool for creating dynamic desktop compositions with images, videos, PDFs, audio, and live text. Built with a Windows 95 aesthetic, Screen Walk enables artists and performers to orchestrate multi-window presentations with precise control over timing, layout, and media playback.
 
-![Desktop Documentary Demo](demo-screenshot.png)
+![Screen Walk Interface](screenshot.png)
 
----
+## License
 
-## 📜 License and Use Notice
+Screen Walk © 2026 Merve Mepa  
+Licensed under Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)
 
-**Desktop Documentary © 2025 Merve Mepa**  
-Licensed under **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)**
+You may share this project with attribution, but commercial use and modifications are prohibited.
 
-You may share this project, but:
+License details: https://creativecommons.org/licenses/by-nc-nd/4.0/
 
-- You **must** give appropriate credit to Merve Mepa,
-- You **cannot** use it for commercial purposes,
-- You **cannot** modify or redistribute altered versions.
+## Overview
 
-🔗 License details: [https://creativecommons.org/licenses/by-nc-nd/4.0/](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+Screen Walk is a single-page web application designed for visual performance and digital art creation. The application opens media files in randomly positioned windows that can be controlled programmatically or manually. Windows maintain their original aspect ratios and are positioned within a safe zone that avoids overlapping control panels.
 
-## 🎯 What is Desktop Documentary?
+Key characteristics:
 
-Desktop Documentary creates **automated visual performances** by opening multiple windows containing your images and videos in intelligent cascade patterns across a virtual desktop. Perfect for:
+- Client-side processing only (no server required)
+- Pure HTML/CSS/JavaScript implementation
+- No external dependencies
+- Responsive layout with dynamic positioning
+- Built-in screen recording capability
 
-- **Performance Art**: Live text performances with visual backgrounds
-- **Digital Art**: Creating unique desktop compositions
-- **Content Creation**: Recording artistic desktop experiences
-- **Nostalgia Projects**: Experiencing classic Windows 95 computing
+## Technical Requirements
 
----
+### Supported Browsers
 
-## ✨ Complete Feature List
+- Chrome/Chromium 90+ (recommended)
+- Firefox 88+
+- Edge 90+
+- Safari 14+ (limited MediaRecorder support)
 
-### 🖼️ **Media Management**
+### Required Browser APIs
 
-- **File Upload**: Select multiple images (JPG, PNG, GIF, WebP) and videos (MP4, WebM, MOV)
-- **Drag & Drop**: Drag files directly onto the desktop
-- **Demo Mode**: Quick start with 5 sample images from Picsum
-- **Dynamic Playlist**: Resizable media list with scroll support
-- **Individual Delete**: Remove items with trash icon (🗑️)
-- **Drag Reordering**: Reorganize playlist by dragging items
+- File API for file uploads
+- Drag and Drop API for file handling
+- MediaRecorder API for screen recording
+- Display Media API for screen capture
+- Local Storage for settings persistence
+- Blob API for media URL management
 
-### 🎮 **Playback Controls**
+### File Format Support
 
-- **Smart Timing**: Adjustable delays between windows (1-8 seconds)
-- **Window Limits**: Control maximum open windows (3-20)
-- **Seeded Random**: Reproducible layouts using custom seeds
-- **Automatic Looping**: Continuous playback for extended performances
-- **Manual Controls**: Start, Reset, and individual window management
+- Images: JPG, PNG, GIF, WebP (max 100MB)
+- Videos: MP4, WebM, MOV (max 100MB)
+- PDF: PDF documents (max 100MB)
+- Audio: MP3, WAV, OGG, AAC (max 50MB)
 
-### 📝 **Text Performance**
+## Core Features
 
-- **Live Text Window**: Resizable notepad-style window for real-time typing
-- **Performance Ready**: Type during recordings for multimedia art
-- **Keyboard Shortcuts**: `Ctrl+T` to toggle, `Ctrl+Shift+C` to clear text
-- **Classic Styling**: Authentic Windows 95 notepad appearance
-- **Draggable**: Position text window anywhere on screen
+### Media Management
 
-### 🎥 **Recording & Capture**
+- Multi-file upload with format validation
+- Drag-and-drop interface for file addition
+- Playlist with drag-to-reorder functionality
+- Individual item deletion
+- Automatic aspect ratio preservation
+- Dynamic window sizing based on content dimensions
 
-- **Built-in Screen Recording**: Capture your entire performance
-- **High Quality**: WebM format with audio support
-- **Auto-download**: Saves recording when stopped
-- **Browser Permissions**: Handles screen sharing requests
+### Window System
 
-### 🖱️ **Window Interaction**
+- Chaotic positioning algorithm with clustering
+- Safe zone calculation to avoid control panel overlap
+- Random size variations with weighted distribution
+- Z-index management for window layering
+- Draggable windows with titlebar control
+- Resizable windows with corner handles
+- Window focusing system
 
-- **Draggable Windows**: Move any window by dragging titlebar
-- **Window Controls**: Minimize (transparency), maximize, and close
-- **Smart Positioning**: Intelligent grid-based layout with organic variation
-- **Size Variety**: Random small/medium/large window sizes
+### PDF Viewer
 
-### 🔧 **Interface Customization**
+- Integrated PDF rendering via iframe
+- Zoom controls (25% to 300%)
+- Pan functionality when zoomed
+- Keyboard shortcuts for zoom control
+- Toggle visibility (front/back positioning)
+- Persistent window state
 
-- **Resizable Panel**: Drag left edge to expand control panel (200px-500px)
-- **Resizable Playlist**: Drag bottom-right corner to expand media list (60px-300px)
-- **Persistent Settings**: Remembers your preferred panel sizes
-- **Responsive Design**: Adapts to different screen sizes
+### Live Text Performance
 
----
+- Always-on-top text window
+- Toggle between front and back positioning
+- Persistent state (does not close)
+- Custom blue background (Windows 95 style)
+- Monospace font for readability
 
-## 🚀 Quick Start Guide
+### Audio Playback
 
-### **1. Initial Setup**
+- Background audio with looping
+- Single audio file support
+- Standard HTML5 audio controls
+- Clear audio functionality
 
-1. Open `index_test.html` in a modern web browser (Chrome recommended)
-2. You'll see the classic Windows 95 desktop with control panel on the right
+### Playback Control
 
-### **2. Add Media**
+- Adjustable duration per window (1-8 seconds)
+- Maximum concurrent windows (3-20)
+- Optional seeded randomization for reproducible layouts
+- Continuous looping
+- Manual start/stop control
 
-**Option A - Upload Files:**
+### Screen Recording
 
-- Click **"📥 Medya Ekle"**
-- Select multiple images/videos from your computer
-- Files appear in the playlist below
+- MediaRecorder integration
+- WebM output format
+- Automatic download on stop
+- Permission handling for display capture
 
-**Option B - Demo Mode:**
+## Architecture
 
-- Click **"✨ Demo"** for 5 sample images
-- Perfect for testing and learning
-
-**Option C - Drag & Drop:**
-
-- Drag files directly from your computer onto the desktop
-- Multiple files supported
-
-### **3. Configure Settings**
-
-- **Süre (Duration)**: Adjust time between window openings
-- **Maks Pencere**: Set maximum simultaneous windows
-- **Rastgele Tohum**: Enter number for consistent layouts (leave blank for random)
-
-### **4. Start Your Documentary**
-
-- Click **"▶ Başlat"** to begin the automated sequence
-- Windows will open in timed intervals with your media
-- **Automatic Looping**: Starts over when all media played
-
-### **5. Add Live Text Performance** _(Optional)_
-
-- Click **"📝 Text"** to open text performance window
-- Type live during playback for multimedia performances
-- Resize and position the text window as needed
-
-### **6. Record Your Performance** _(Optional)_
-
-- Click **"⏺ Kayıt"** to start screen recording
-- Grant screen sharing permission when prompted
-- Click again to stop and download recording
-
-### **7. Interactive Controls**
-
-- **Drag Windows**: Click and drag any window titlebar to reposition
-- **Window Controls**: Use `_`, `□`, `×` buttons in window corners
-- **Reset**: Click **"🔄 Reset"** to close all windows and stop
-
----
-
-## 🎨 Advanced Usage
-
-### **Creating Reproducible Layouts**
+### File Structure
 
 ```
-1. Load your media files
-2. Enter a number in "Rastgele Tohum" (e.g., 12345)
-3. Start documentary
-4. Same seed = same layout every time
+index_test.html        # Main application (self-contained)
+README.md             # Documentation
+LICENSE.md            # License information
+materials/            # Assets (cursors, icons)
+  └── playlist.txt    # Configuration data
 ```
 
-### **Performance Art Setup**
-
-```
-1. Load artistic images/videos
-2. Open text window (📝 Text button)
-3. Position text window for visibility
-4. Start recording (⏺ Kayıt)
-5. Begin documentary (▶ Başlat)
-6. Type live text during playback
-7. Stop recording when complete
-```
-
-### **Long Performance Sessions**
-
-```
-1. Set higher "Maks Pencere" (15-20)
-2. Use shorter "Süre" intervals (1-2 seconds)
-3. Documentary will loop automatically
-4. Text window stays open for continuous performance
-```
-
-### **Custom Timing Per File**
-
-- Each file type has default timing (images: 3s, videos: 4s)
-- Modify timing in playlist if needed
-- Videos play their full length regardless of timing setting
-
----
-
-## 🔧 Technical Details
-
-### **Browser Requirements**
-
-- **Recommended**: Chrome/Edge (full feature support)
-- **Compatible**: Firefox (full support)
-- **Limited**: Safari (basic features, recording may not work)
-
-### **Required Browser Features**
-
-- File API (for uploads)
-- Drag & Drop API
-- MediaRecorder API (for screen recording)
-- Display Media API (for screen capture)
-- Local Storage (for settings)
-
-### **File Format Support**
-
-- **Images**: JPG, JPEG, PNG, GIF, WebP (up to 100MB each)
-- **Videos**: MP4, WebM, MOV (up to 100MB each)
-
-### **Performance Tips**
-
-- **Optimal file count**: 5-20 media files
-- **Recommended file size**: Under 10MB each for smooth performance
-- **Browser memory**: Close other tabs during recording
-- **Recording quality**: Use fullscreen mode for best results
-
----
-
-## 🎮 Keyboard Shortcuts
-
-| Shortcut       | Action                                |
-| -------------- | ------------------------------------- |
-| `Ctrl+T`       | Toggle text performance window        |
-| `Ctrl+Shift+C` | Clear text (when text window focused) |
-| `Drag`         | Move windows or resize panels         |
-| `Drop`         | Add files to desktop                  |
-
----
-
-## 🔍 Troubleshooting
-
-### **Media Not Loading**
-
-- Check file formats are supported
-- Ensure files are under 100MB
-- Try refreshing browser
-- Check browser console for errors
-
-### **Windows Not Opening**
-
-- Verify playlist has media items
-- Check browser console for JavaScript errors
-- Try clearing browser cache
-- Ensure no popup blockers active
-
-### **Recording Issues**
-
-- **Chrome/Firefox**: Should work fully
-- **Safari**: May have limitations
-- **Permissions**: Grant screen sharing when prompted
-- **HTTPS**: Some browsers require secure connection
-- **Performance**: Close unnecessary browser tabs
-
-### **Performance Issues**
-
-- Reduce "Maks Pencere" setting
-- Use smaller image files
-- Close other applications
-- Try incognito/private browsing mode
-
-### **Panel/Window Issues**
-
-- **Resize not working**: Try dragging from exact edges
-- **Windows stuck**: Use Reset button
-- **Text window missing**: Click 📝 Text button again
-
----
-
-## 🎯 Creative Ideas & Use Cases
-
-### **Art Projects**
-
-- **Memory Collages**: Use personal photos with stream-of-consciousness text
-- **Poetry Performances**: Write live poetry as images cascade
-- **Visual Narratives**: Tell stories through image sequences and live text
-- **Abstract Compositions**: Use random seeds for unexpected layouts
-
-### **Educational Uses**
-
-- **Digital Literacy**: Demonstrate how early computer interfaces worked
-- **Art History**: Recreate desktop aesthetic movements
-- **Media Studies**: Explore relationship between text and image
-
-### **Performance Art**
-
-- **Live Streaming**: Use for Twitch/YouTube creative streams
-- **Gallery Installations**: Set up on large screens for public interaction
-- **Workshop Activities**: Collaborative storytelling sessions
-- **Digital Theater**: Create desktop-based performances
-
-### **Personal Projects**
-
-- **Memory Documentation**: Family photos with live commentary
-- **Creative Journaling**: Daily visual and text entries
-- **Mood Boards**: Dynamic collections that evolve over time
-- **Digital Scrapbooking**: Interactive memory preservation
-
----
-
-## 💾 Data & Privacy
-
-### **Local Storage Only**
-
-- All files processed locally in browser
-- No uploads to servers
-- Complete privacy protection
-- Data cleared when browser cache cleared
-
-### **File Handling**
-
-- Files converted to blob URLs for display
-- Memory cleaned up when items deleted
-- No permanent storage without user action
-- Recording files downloaded to user's computer
-
----
-
-## 🔄 Version History & Updates
-
-### **Current Version: 2.0**
-
-- ✅ File upload system
-- ✅ Text performance window
-- ✅ Automatic looping
-- ✅ Resizable interface
-- ✅ Individual delete buttons
-- ✅ Drag & drop reordering
-- ✅ Screen recording
-- ✅ Smart positioning algorithm
-
-### **Future Enhancements** _(Ideas)_
-
-- Multiple desktop themes (Mac OS Classic, etc.)
-- Sound effects and background music
-- Export configurations
-- Collaborative sessions
-- Mobile touch support
-- WebGL effects
-- AI-generated content integration
-
----
-
-## 🤝 Support & Community
-
-### **Getting Help**
-
-- Check this README for common issues
-- Use browser developer tools to check console errors
-- Try different browsers if problems persist
-- Test with demo mode first
-
-### **Contributing Ideas**
-
-- Performance art techniques
-- Creative use cases
-- Technical improvements
-- Interface enhancements
-- New feature suggestions
-
----
-
-## 📄 Technical Implementation
-
-### **Core Architecture**
-
-- **Frontend Only**: Pure HTML/CSS/JavaScript
-- **No Dependencies**: No external libraries required
-- **Modern APIs**: Uses latest browser capabilities
-- **Responsive Design**: CSS Grid and Flexbox
-- **Event-Driven**: Clean separation of concerns
-
-### **File Structure**
-
-```
-Desktop Documentary/
-├── index_test.html     # Complete application (single file)
-├── README.md          # This documentation
-└── demo-images/       # Optional demo assets
+### Key Functions
+
+#### Media Handling
+
+- `addFiles(fileList)` - Validates and processes uploaded files
+- `addPdfFiles(files)` - Handles PDF file upload
+- `validateFile(file)` - Validates file type and size
+- `renderPlaylist()` - Updates playlist UI
+
+#### Window Management
+
+- `createWindow(item, index)` - Creates and positions media windows
+- `generateChaoticPosition(index, total)` - Calculates window position within safe zone
+- `getChaoticSize()` - Determines random window dimensions
+- `fitMediaToRandomWindow(mediaElement)` - Adjusts window to media aspect ratio
+- `closeWindow(id, instant)` - Removes window from DOM
+
+#### Text Window
+
+- `toggleTextWindow()` - Toggles text window front/back state
+- `openTextWindow()` - Creates text performance window
+- `sendTextToBack()` - Moves text window to z-index 50
+- `bringTextToFront()` - Moves text window to z-index 9999
+
+#### PDF Window
+
+- `openPdfWindow()` - Creates PDF viewer window
+- `initializePdfZoom(pdfWindow)` - Sets up zoom and pan controls
+- `sendPdfToBack()` - Moves PDF window to z-index 50
+- `bringPdfToFront()` - Moves PDF window to z-index 9999
+- `closePdfWindow()` - Closes and cleans up PDF window
+
+#### Layout System
+
+- Safe zone calculation: `screenWidth - controlsPanelWidth - windowWidth`
+- Dynamic positioning adjusts to browser dimensions
+- Cluster-based random distribution (40% clustering probability)
+- Edge preference algorithm (30% probability)
+
+### State Management
+
+#### Global Variables
+
+```javascript
+let mediaItems = []; // Visual media queue
+let audioItems = []; // Audio files
+let pdfItems = []; // PDF documents
+let currentPdf = null; // Active PDF
+let pdfWindow = null; // PDF window reference
+let isPdfWindowOpen = false; // PDF window state
+let textWindow = null; // Text window reference
+let isTextWindowOpen = false; // Text window state
+let openWindows = []; // Currently displayed windows
+let isRunning = false; // Playback state
+let currentIndex = 0; // Playback position
 ```
 
-### **Key Functions**
+### CSS Architecture
 
-- `addFiles()` - Handle file uploads and drag-drop
-- `start()` - Begin documentary playback with looping
-- `createWindow()` - Generate positioned media windows
-- `toggleTextWindow()` - Manage text performance window
-- `toggleRecording()` - Handle screen capture recording
+#### Z-Index Hierarchy
 
----
+- Control panel: 10000+ (increments on click)
+- Text window (front): 9999
+- PDF window (front): 9999
+- Help window: 1000
+- Media windows: 100-150 (random)
+- Text/PDF window (back): 50
+- Desktop: 1
 
-**Desktop Documentary** - Transform your media into interactive visual performances with authentic Windows 95 nostalgia.
+#### Layout System
 
-_Last Updated: October 2025 | Version 2.0_
+- Fixed control panel (right side, 240px width)
+- Safe zone calculation: viewport width - 280px
+- Responsive grid for desktop icons
+- Flexbox for control groups
+- Dynamic button sizing with flex: 1
 
-### 🎮 **TESTTEST**
+## Usage
+
+### Basic Setup
+
+1. Open `index_test.html` in a modern browser
+2. Upload media files via "Upload Media" button
+3. Configure duration and max windows settings
+4. Click "Start" to begin automated playback
+
+### PDF Integration
+
+1. Click "Upload PDF" to select PDF file
+2. PDF opens automatically in viewer window
+3. Use zoom controls (+, -, 1:1) or Ctrl+scroll
+4. Click and drag to pan when zoomed
+5. Click "Send Back" to move behind other windows
+6. Click again to bring to front
+
+### Live Text Performance
+
+1. Click "Live Text Box" to open text window
+2. Window opens at z-index 9999 (always on top)
+3. Type content in real-time
+4. Click "Send Back" to move behind other windows
+5. Click again to bring to front
+6. Window persists until explicitly closed
+
+### Recording Workflow
+
+1. Click "Record" button
+2. Grant screen sharing permission
+3. Select entire screen or window
+4. Click "Start" to begin media playback
+5. Perform live text input if desired
+6. Click "Record" again to stop and download
+
+### Advanced Configuration
+
+#### Seeded Randomization
+
+Enter a numeric seed in "Random Seed" field for reproducible layouts. Same seed produces identical positioning across sessions.
+
+#### Custom Duration
+
+Adjust "Duration (s)" slider (1-8 seconds) to control time between window openings.
+
+#### Window Limits
+
+Set "Max Windows" (3-20) to control concurrent window count. Oldest windows close automatically when limit reached.
+
+## Performance Considerations
+
+### Optimization Recommendations
+
+- Limit file count to 20-30 for optimal performance
+- Keep individual files under 10MB
+- Use compressed video formats (H.264)
+- Close unnecessary browser tabs during recording
+- Disable browser extensions if experiencing lag
+
+### Memory Management
+
+- Blob URLs created for all media files
+- URLs revoked when items deleted
+- Windows removed from DOM on close
+- Automatic cleanup on reset
+
+### Browser-Specific Issues
+
+#### Chrome/Edge
+
+- Full feature support
+- Recommended for recording
+- Hardware acceleration enabled by default
+
+#### Firefox
+
+- Full feature support
+- May require manual hardware acceleration enable
+- Recording quality may vary
+
+#### Safari
+
+- Limited MediaRecorder support
+- PDF rendering may differ
+- Some keyboard shortcuts may conflict
+
+## Keyboard Shortcuts
+
+| Shortcut    | Action                        |
+| ----------- | ----------------------------- |
+| Ctrl+T      | Toggle text window front/back |
+| Ctrl++      | Zoom in (PDF)                 |
+| Ctrl+-      | Zoom out (PDF)                |
+| Ctrl+0      | Reset zoom (PDF)              |
+| Ctrl+scroll | Zoom at cursor (PDF)          |
+
+## Troubleshooting
+
+### Media Not Displaying
+
+- Verify file format compatibility
+- Check file size limits (100MB)
+- Inspect browser console for errors
+- Try different file formats
+
+### Windows Overlapping Control Panel
+
+- Resize browser window to recalculate safe zone
+- Manually drag windows to desired positions
+- Click control panel to bring to front
+
+### Recording Failures
+
+- Confirm screen sharing permission granted
+- Use Chrome/Edge for best results
+- Close other applications to free resources
+- Check available disk space
+
+### PDF Not Rendering
+
+- Verify PDF is not corrupted
+- Try different PDF file
+- Check browser PDF plugin settings
+- Use alternate browser
+
+### Text Window Not Responding
+
+- Click window to focus
+- Check z-index with browser inspector
+- Refresh page if window becomes unresponsive
+
+## Security and Privacy
+
+All media processing occurs client-side. No data is transmitted to external servers. Files are converted to blob URLs for display and are not stored permanently unless explicitly saved by the user.
+
+### Data Storage
+
+- Local Storage: Control panel dimensions and settings
+- Session Storage: None
+- Cookies: None
+- External Requests: None (except demo image URLs)
+
+## Development
+
+### Extending Functionality
+
+#### Adding New Media Types
+
+1. Update `validateFile()` function with new MIME type
+2. Create handling logic in `addFiles()`
+3. Modify `createWindow()` to support new content type
+4. Update UI to reflect new capabilities
+
+#### Custom Positioning Algorithms
+
+Modify `generateChaoticPosition()` function to implement alternative distribution patterns:
+
+- Grid-based layouts
+- Spiral patterns
+- Specific coordinate mapping
+- Edge-aligned positioning
+
+#### Theme Customization
+
+CSS variables defined in `:root` control color scheme:
+
+```css
+--bar: #c0c0c0 /* Window chrome */ --bar2: #dfdfdf /* Window chrome gradient */
+  --blue: #000080 /* Title bars */;
+```
+
+## API Reference
+
+### Core Methods
+
+#### start()
+
+Begins automated media playback with configured settings. Loops continuously until stopped.
+
+#### reset()
+
+Stops playback, closes all windows, resets state.
+
+#### createWindow(item, index)
+
+Creates media window with random positioning and sizing.
+
+- Parameters: `item` (media object), `index` (playback position)
+- Returns: DOM element reference
+
+#### toggleTextWindow()
+
+Toggles text window between front (z-index 9999) and back (z-index 50).
+
+#### toggleRecording()
+
+Starts or stops screen recording using MediaRecorder API.
+
+## Version History
+
+### Version 2.0 (February 2026)
+
+- Renamed project to Screen Walk
+- Implemented persistent text window with front/back toggle
+- Added PDF front/back toggle functionality
+- Implemented dynamic safe zone positioning
+- Added aspect ratio preservation for media
+- Removed demo button
+- Updated button styling (monochrome except Record)
+- Reorganized control panel layout
+- Added clickable control panel (bring to front)
+- Updated text box background color (#000080)
+
+### Version 1.0 (2025)
+
+- Initial release as Desktop Documentary
+- Basic media playback
+- Text performance window
+- Screen recording
+- PDF viewer with zoom/pan
+
+## Credits
+
+Screen Walk © 2026 Merve Mepa
+
+## Contact
+
+For technical issues or feature requests, consult the browser console for detailed error messages and use standard web development debugging tools.
+
+## Contact
+
+For technical issues or feature requests, consult the browser console for detailed error messages and use standard web development debugging tools.
