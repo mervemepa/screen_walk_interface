@@ -589,7 +589,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             outline: none;
             font-family: 'Courier New', monospace;
             font-size: 24px;
-            background: #001eff;
+            background: #000080;
             color: #fff;
             resize: none;
             padding: 4px;
@@ -946,6 +946,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                 <span id="pdfTitle">No PDF selected</span>
                 <button id="clearPdf" class="btn small">×</button>
             </div>
+            <button class="btn block" id="textBtn" title="Open text box for performance">Live Text Box</button>
         </div>
 
         <!-- Settings Section -->
@@ -980,10 +981,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
 
         <!-- Utility Section -->
         <div class="section-group">
-            <div class="row">
-                <button class="btn" id="textBtn" title="Open text box for performance">Live Text Box</button>
-                <button class="btn" id="helpBtn" title="Show instructions">Info</button>
-            </div>
+            <button class="btn block" id="helpBtn" title="Show instructions">Info</button>
         </div>
     </div>
 
@@ -2361,9 +2359,9 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             isTextWindowOpen = true;
             const btn = document.getElementById('textBtn');
             btn.classList.add('active');
-            btn.textContent = '📝 Kapat';
+            btn.textContent = '📝 Close';
 
-            document.getElementById('status').textContent = 'Metin performans penceresi açıldı.';
+            document.getElementById('status').textContent = 'Text performance window opened.';
         }
 
         function closeTextWindow() {
@@ -2384,7 +2382,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             btn.classList.remove('active');
             btn.textContent = '📝 Text';
 
-            document.getElementById('status').textContent = 'Metin performans penceresi kapatıldı.';
+            document.getElementById('status').textContent = 'Text performance window closed.';
         }
         
         function openHelpWindow() {
