@@ -325,7 +325,6 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             font-weight: bold;
             color: #000080;
             margin-bottom: 6px;
-            text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
@@ -365,6 +364,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             gap: 6px;
             align-items: center;
             margin: 4px 0
+        }
+
+        .row .btn {
+            flex: 1;
         }
 
         .row label {
@@ -703,15 +706,6 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             color: #000080;
         }
 
-        .btn.audio-btn {
-            background: linear-gradient(to bottom, #dda0dd 0%, #ba55d3 100%);
-            border: 1px outset #dda0dd;
-        }
-
-        .btn.audio-btn:hover {
-            background: linear-gradient(to bottom, #e6b3e6 0%, #c967c9 100%);
-        }
-
         .audio-controls {
             margin-top: 8px;
         }
@@ -750,13 +744,9 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         }
 
         .btn.pdf-btn {
-            background: linear-gradient(to bottom, #ff6b35 0%, #d84315 100%);
-            border: 1px outset #ff6b35;
-            color: #fff;
         }
 
         .btn.pdf-btn:hover {
-            background: linear-gradient(to bottom, #ff8a65 0%, #f4511e 100%);
         }
 
         .pdf-info {
@@ -924,8 +914,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         
         <!-- Media Upload Section -->
         <div class="section-group">
-            <div class="section-label">Media</div>
-            <button class="btn block" id="addBtn">📥 Upload Media</button>
+            <button class="btn block" id="addBtn">Upload Media</button>
             <input type="file" id="filePicker" accept="image/*,video/*" multiple hidden />
             
             <div class="status" id="status">Add files to begin.</div>
@@ -936,8 +925,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
 
         <!-- Audio Section -->
         <div class="section-group">
-            <div class="section-label">Audio</div>
-            <button class="btn block audio-btn" id="audioBtn">🎵 Upload Audio</button>
+            <button class="btn block audio-btn" id="audioBtn">Upload Audio</button>
             <input type="file" id="audioPicker" accept="audio/*" multiple hidden />
             <div id="audioPlayer" class="audio-controls" style="display:none;">
                 <audio id="backgroundAudio" controls loop>
@@ -952,8 +940,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
 
         <!-- PDF Section -->
         <div class="section-group">
-            <div class="section-label">PDF</div>
-            <button class="btn block pdf-btn" id="pdfBtn">📄 Upload PDF</button>
+            <button class="btn block pdf-btn" id="pdfBtn">Upload PDF</button>
             <input type="file" id="pdfPicker" accept=".pdf,application/pdf" hidden />
             <div id="pdfInfo" class="pdf-info" style="display:none;">
                 <span id="pdfTitle">No PDF selected</span>
@@ -984,16 +971,18 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
 
         <!-- Actions Section -->
         <div class="section-group">
-            <button class="btn block" id="startBtn">▶ Start</button>
-            <button class="btn block" id="resetBtn">🔄 Reset</button>
-            <button class="btn block rec" id="recBtn">⏺ Record</button>
+            <div class="row">
+                <button class="btn" id="startBtn">Start</button>
+                <button class="btn" id="resetBtn">Reset</button>
+                <button class="btn rec" id="recBtn">⏺ Record</button>
+            </div>
         </div>
 
         <!-- Utility Section -->
         <div class="section-group">
             <div class="row">
-                <button class="btn" id="textBtn" title="Open text box for performance">📝 Text</button>
-                <button class="btn" id="helpBtn" title="Show instructions">❓ Info</button>
+                <button class="btn" id="textBtn" title="Open text box for performance">Live Text Box</button>
+                <button class="btn" id="helpBtn" title="Show instructions">Info</button>
             </div>
         </div>
     </div>
