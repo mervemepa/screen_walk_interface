@@ -633,64 +633,138 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             min-width: auto;
         }
 
-        /* Background Color Controls */
-        .bg-color-section {
+        /* PDF Section Styles */
+        .pdf-section {
             margin: 10px 0;
             padding: 8px;
             border: 1px inset #c0c0c0;
             background: #e6e6e6;
         }
 
-        .bg-color-section h4 {
+        .pdf-section h4 {
             margin: 0 0 8px 0;
             font-size: 11px;
             color: #000080;
         }
 
-        .color-palette {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 4px;
+        .btn.pdf-btn {
+            background: linear-gradient(to bottom, #ff6b35 0%, #d84315 100%);
+            border: 1px outset #ff6b35;
+            color: #fff;
+        }
+
+        .btn.pdf-btn:hover {
+            background: linear-gradient(to bottom, #ff8a65 0%, #f4511e 100%);
+        }
+
+        .pdf-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
             margin-top: 8px;
         }
 
-        .color-option {
-            width: 32px;
-            height: 32px;
+        /* PDF Window Styles */
+        .pdf-window {
+            position: absolute;
+            background: #c0c0c0;
             border: 2px outset #c0c0c0;
-            cursor: pointer;
+            min-width: 400px;
+            min-height: 300px;
+            width: 600px;
+            height: 500px;
+            box-shadow: 4px 4px 8px var(--shadow);
+            z-index: 200;
+            resize: both;
+            overflow: hidden;
+        }
+
+        .pdf-window .window-titlebar {
+            background: linear-gradient(to right, var(--title1) 0%, var(--title2) 100%);
+            height: 18px;
+            display: flex;
+            align-items: center;
+            padding: 2px 4px;
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: move;
+        }
+
+        .pdf-window .pdf-toolbar {
+            background: #c0c0c0;
+            border-bottom: 1px inset #c0c0c0;
+            padding: 4px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            height: 28px;
+        }
+
+        .pdf-window .zoom-controls {
+            display: flex;
+            gap: 2px;
+            align-items: center;
+        }
+
+        .pdf-window .fit-controls {
+            display: flex;
+            gap: 2px;
+            align-items: center;
+            margin-left: 8px;
+            padding-left: 8px;
+            border-left: 1px solid #808080;
+        }
+
+        .pdf-window .zoom-btn, .pdf-window .fit-btn {
+            background: linear-gradient(to bottom, #c0c0c0 0%, #a0a0a0 100%);
+            border: 1px outset #c0c0c0;
+            height: 20px;
+            padding: 0 6px;
+            font-size: 10px;
+            font-weight: bold;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
-            color: #fff;
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.8);
-            transition: border 0.1s;
+            cursor: pointer;
         }
 
-        .color-option:hover {
-            border: 2px inset #c0c0c0;
+        .pdf-window .zoom-btn:active, .pdf-window .fit-btn:active {
+            border: 1px inset #c0c0c0;
         }
 
-        .color-option.active {
-            border: 2px inset #808080;
-            background-image: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 2px,
-                rgba(255,255,255,0.1) 2px,
-                rgba(255,255,255,0.1) 4px
-            );
+        .pdf-window .zoom-level {
+            font-size: 11px;
+            color: #000080;
+            margin: 0 4px;
+            min-width: 40px;
+            text-align: center;
         }
 
-        .btn.bg-btn {
-            background: linear-gradient(to bottom, #87ceeb 0%, #4682b4 100%);
-            border: 1px outset #87ceeb;
-            color: #000;
+        .pdf-window .pdf-content {
+            background: #f0f0f0;
+            height: calc(100% - 46px);
+            overflow: auto;
+            border: 1px inset #c0c0c0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
         }
 
-        .btn.bg-btn:hover {
-            background: linear-gradient(to bottom, #b0e0e6 0%, #5f9ea0 100%);
+        .pdf-window .pdf-container {
+            background: #fff;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            border: 1px solid #ccc;
+        }
+
+        .pdf-window iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+            display: block;
         }
 
         /* Custom Windows 95 Cursor */
@@ -699,7 +773,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         }
 
         /* Different cursor for clickable elements */
-        .btn, .desktop-icon, .window-control, button, input[type="range"], input[type="file"], .window-titlebar, .color-option {
+        .btn, .desktop-icon, .window-control, button, input[type="range"], input[type="file"], .window-titlebar, .zoom-btn {
             cursor: url('materials/computer-mouse-pointer-cursor-fagor-automation-gmbh-windows-95-windows-cursor-82f51c165e80ea90af0c79293d1fc9b2.png'), pointer;
         }
     </style>
@@ -749,19 +823,14 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             </div>
         </div>
 
-        <!-- Background Color Section -->
-        <div class="bg-color-section">
-            <h4>🎨 Desktop Background</h4>
-            <button class="btn bg-btn" id="bgToggleBtn">🎨 Toggle Colors</button>
-            <div id="colorPalette" class="color-palette" style="display:none;">
-                <div class="color-option active" data-bg="teal" style="background: linear-gradient(45deg, #008080 0%, #006666 50%, #004444 100%);" title="Original Teal">🌊</div>
-                <div class="color-option" data-bg="neon" style="background: linear-gradient(45deg, #FF00FF 0%, #C71585 50%, #8B008B 100%);" title="Neon Pink">💖</div>
-                <div class="color-option" data-bg="cyber" style="background: linear-gradient(45deg, #00FFFF 0%, #1E90FF 50%, #0000CD 100%);" title="Cyber Blue">⚡</div>
-                <div class="color-option" data-bg="matrix" style="background: linear-gradient(45deg, #00FF41 0%, #00CC33 50%, #008000 100%);" title="Matrix Green">🤖</div>
-                <div class="color-option" data-bg="electric" style="background: linear-gradient(45deg, #FFFF00 0%, #FFD700 50%, #FFA500 100%);" title="Electric Yellow">⚡</div>
-                <div class="color-option" data-bg="synthwave" style="background: linear-gradient(45deg, #FF1493 0%, #9400D3 50%, #4B0082 100%);" title="Synthwave Purple">🌆</div>
-                <div class="color-option" data-bg="toxic" style="background: linear-gradient(45deg, #ADFF2F 0%, #32CD32 50%, #228B22 100%);" title="Toxic Green">☢️</div>
-                <div class="color-option" data-bg="hotpink" style="background: linear-gradient(45deg, #FF69B4 0%, #FF1493 50%, #DC143C 100%);" title="Hot Pink">🔥</div>
+        <!-- PDF Section -->
+        <div class="pdf-section">
+            <h4>📄 PDF Documents</h4>
+            <button class="btn pdf-btn" id="pdfBtn">📄 Upload PDF</button>
+            <input type="file" id="pdfPicker" accept=".pdf,application/pdf" hidden />
+            <div id="pdfInfo" class="pdf-info" style="display:none;">
+                <span id="pdfTitle">No PDF selected</span>
+                <button id="clearPdf" class="btn small">×</button>
             </div>
         </div>
 
@@ -804,6 +873,9 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         let mediaItems = [];       // {name, type:'image'|'video', url, duration} - visual media only
         let audioItems = [];       // {name, url} - background audio files
         let currentAudio = null;   // currently loaded audio
+        let pdfItems = [];         // {name, url} - PDF documents
+        let currentPdf = null;     // currently loaded PDF
+        let pdfWindow = null;      // PDF viewer window
         let isRunning = false;
         let currentIndex = 0;
         let openWindows = [];
@@ -873,6 +945,12 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         function validateAudioFile(file) {
             const maxSize = 50 * 1024 * 1024; // 50MB for audio
             return file.size <= maxSize && file.type.startsWith('audio/');
+        }
+
+        // Add file validation for PDF
+        function validatePdfFile(file) {
+            const maxSize = 100 * 1024 * 1024; // 100MB for PDF
+            return file.size <= maxSize && file.type === 'application/pdf';
         }
 
         /* ---------- Dynamic Window Sizing ---------- */
@@ -1457,6 +1535,260 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             document.getElementById('audioTitle').textContent = 'No audio selected';
         }
 
+        /* ---------- PDF Management ---------- */
+        async function addPdfFiles(fileList) {
+            const items = Array.from(fileList);
+            
+            for (const f of items) {
+                if (!validatePdfFile(f)) {
+                    systemSounds.error();
+                    const msg = `Invalid PDF file: ${f.name} (type: ${f.type}, size: ${(f.size / (1024 * 1024)).toFixed(1)}MB)`;
+                    document.getElementById('status').textContent = msg;
+                    setTimeout(() => { if (document.getElementById('status').textContent === msg) document.getElementById('status').textContent = ''; }, 5000);
+                    continue;
+                }
+                
+                const url = URL.createObjectURL(f);
+                pdfItems.push({ name: f.name, url });
+                currentPdf = { name: f.name, url };
+                
+                // Update UI
+                const pdfInfo = document.getElementById('pdfInfo');
+                const pdfTitle = document.getElementById('pdfTitle');
+                pdfTitle.textContent = f.name;
+                pdfInfo.style.display = 'flex';
+                
+                // Open PDF window immediately
+                openPdfWindow();
+                
+                systemSounds.open();
+                document.getElementById('status').textContent = `PDF loaded: ${f.name}`;
+            }
+        }
+        
+        function openPdfWindow() {
+            if (!currentPdf || pdfWindow) return; // No PDF or already open
+            
+            const desktop = document.getElementById('desktop');
+            pdfWindow = document.createElement('div');
+            pdfWindow.className = 'pdf-window';
+            pdfWindow.id = 'pdfViewerWindow';
+            
+            // Position in center
+            const x = Math.max(50, (window.innerWidth - 600) / 2);
+            const y = Math.max(50, (window.innerHeight - 500) / 2);
+            
+            pdfWindow.style.left = px(x);
+            pdfWindow.style.top = px(y);
+            pdfWindow.style.zIndex = 200;
+            
+            pdfWindow.innerHTML = `
+                <div class="window-titlebar">
+                    <div class="window-title">📄 PDF Viewer - ${currentPdf.name}</div>
+                    <div class="window-controls">
+                        <div class="window-control" data-act="min">_</div>
+                        <div class="window-control" data-act="close">×</div>
+                    </div>
+                </div>
+                <div class="pdf-toolbar">
+                    <div class="zoom-controls">
+                        <button class="zoom-btn" id="zoomOut" title="Zoom Out">-</button>
+                        <span class="zoom-level" id="zoomLevel">Fit Width</span>
+                        <button class="zoom-btn" id="zoomIn" title="Zoom In">+</button>
+                    </div>
+                    <div class="fit-controls">
+                        <button class="fit-btn" id="fitWidth" title="Fit to Width">Fit Width</button>
+                        <button class="fit-btn" id="fitPage" title="Fit Page">Fit Page</button>
+                        <button class="fit-btn" id="actualSize" title="Actual Size">100%</button>
+                    </div>
+                </div>
+                <div class="pdf-content" id="pdfContent">
+                    <div class="pdf-container" id="pdfContainer">
+                        <iframe src="${currentPdf.url}" type="application/pdf">
+                            <p>Your browser does not support PDF viewing. <a href="${currentPdf.url}" target="_blank">Download PDF</a></p>
+                        </iframe>
+                    </div>
+                </div>
+            `;
+            
+            desktop.appendChild(pdfWindow);
+            
+            // Make draggable
+            const titlebar = pdfWindow.querySelector('.window-titlebar');
+            makeDraggable(pdfWindow, titlebar);
+            
+            // Initialize zoom functionality
+            initializePdfZoom(pdfWindow);
+            
+            // Window controls
+            pdfWindow.querySelector('.window-controls').addEventListener('click', (e) => {
+                const act = e.target.getAttribute('data-act');
+                if (act === 'close') {
+                    closePdfWindow();
+                }
+                if (act === 'min') {
+                    pdfWindow.style.opacity = pdfWindow.style.opacity === '0.3' ? '1' : '0.3';
+                }
+            });
+            
+            document.getElementById('status').textContent = 'PDF window opened.';
+        }
+        
+        function initializePdfZoom(pdfWindow) {
+            let currentMode = 'fitWidth';
+            const zoomLevels = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 3.0];
+            let currentZoomIndex = 2; // Start at 100%
+            
+            const pdfContainer = pdfWindow.querySelector('#pdfContainer');
+            const pdfContent = pdfWindow.querySelector('#pdfContent');
+            const zoomLevel = pdfWindow.querySelector('#zoomLevel');
+            const zoomInBtn = pdfWindow.querySelector('#zoomIn');
+            const zoomOutBtn = pdfWindow.querySelector('#zoomOut');
+            const fitWidthBtn = pdfWindow.querySelector('#fitWidth');
+            const fitPageBtn = pdfWindow.querySelector('#fitPage');
+            const actualSizeBtn = pdfWindow.querySelector('#actualSize');
+            
+            function updatePdfDisplay() {
+                if (currentMode === 'fitWidth') {
+                    pdfContainer.style.width = '100%';
+                    pdfContainer.style.height = 'auto';
+                    zoomLevel.textContent = 'Fit Width';
+                } else if (currentMode === 'fitPage') {
+                    pdfContainer.style.width = 'auto';
+                    pdfContainer.style.height = '100%';
+                    zoomLevel.textContent = 'Fit Page';
+                } else {
+                    // Fixed zoom level
+                    const zoom = zoomLevels[currentZoomIndex];
+                    pdfContainer.style.width = (zoom * 600) + 'px';
+                    pdfContainer.style.height = (zoom * 800) + 'px';
+                    zoomLevel.textContent = Math.round(zoom * 100) + '%';
+                }
+                
+                // Update button states
+                zoomInBtn.disabled = (currentMode === 'zoom' && currentZoomIndex >= zoomLevels.length - 1);
+                zoomOutBtn.disabled = (currentMode === 'zoom' && currentZoomIndex <= 0);
+                
+                // Update button appearance
+                if (zoomInBtn.disabled) {
+                    zoomInBtn.style.opacity = '0.5';
+                } else {
+                    zoomInBtn.style.opacity = '1';
+                }
+                
+                if (zoomOutBtn.disabled) {
+                    zoomOutBtn.style.opacity = '0.5';
+                } else {
+                    zoomOutBtn.style.opacity = '1';
+                }
+            }
+            
+            // Zoom In
+            zoomInBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentMode !== 'zoom') {
+                    currentMode = 'zoom';
+                    currentZoomIndex = 3; // 125%
+                } else if (currentZoomIndex < zoomLevels.length - 1) {
+                    currentZoomIndex++;
+                }
+                updatePdfDisplay();
+            });
+            
+            // Zoom Out
+            zoomOutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentMode !== 'zoom') {
+                    currentMode = 'zoom';
+                    currentZoomIndex = 1; // 75%
+                } else if (currentZoomIndex > 0) {
+                    currentZoomIndex--;
+                }
+                updatePdfDisplay();
+            });
+            
+            // Fit Width
+            fitWidthBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentMode = 'fitWidth';
+                updatePdfDisplay();
+            });
+            
+            // Fit Page
+            fitPageBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentMode = 'fitPage';
+                updatePdfDisplay();
+            });
+            
+            // Actual Size (100%)
+            actualSizeBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentMode = 'zoom';
+                currentZoomIndex = 2; // 100%
+                updatePdfDisplay();
+            });
+            
+            // Keyboard shortcuts
+            pdfWindow.addEventListener('keydown', (e) => {
+                if (e.ctrlKey || e.metaKey) {
+                    if (e.key === '+' || e.key === '=') {
+                        e.preventDefault();
+                        zoomInBtn.click();
+                    } else if (e.key === '-') {
+                        e.preventDefault();
+                        zoomOutBtn.click();
+                    } else if (e.key === '0') {
+                        e.preventDefault();
+                        actualSizeBtn.click();
+                    }
+                }
+            });
+            
+            // Make the window focusable for keyboard shortcuts
+            pdfWindow.setAttribute('tabindex', '0');
+            pdfWindow.focus();
+            
+            // Initialize with fit width
+            updatePdfDisplay();
+        }
+        
+        function closePdfWindow() {
+            if (pdfWindow) {
+                pdfWindow.style.transform = 'scale(0.8)';
+                pdfWindow.style.opacity = '0';
+                
+                setTimeout(() => {
+                    if (pdfWindow) {
+                        pdfWindow.remove();
+                        pdfWindow = null;
+                    }
+                }, 200);
+            }
+            
+            document.getElementById('status').textContent = 'PDF window closed.';
+        }
+        
+        function clearPdf() {
+            // Close window if open
+            closePdfWindow();
+            
+            // Clear PDF data
+            if (currentPdf && currentPdf.url) {
+                URL.revokeObjectURL(currentPdf.url);
+            }
+            
+            pdfItems = [];
+            currentPdf = null;
+            
+            // Update UI
+            const pdfInfo = document.getElementById('pdfInfo');
+            pdfInfo.style.display = 'none';
+            document.getElementById('pdfTitle').textContent = 'No PDF selected';
+            
+            document.getElementById('status').textContent = 'PDF cleared.';
+        }
+
         /* ---------- Media loading (visual only) ---------- */
         function durationMs() { return parseFloat(document.getElementById('speed').value) * 1000; }
 
@@ -1573,131 +1905,23 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             }
         }
 
-        /* ---------- Background Color Management ---------- */
-        let currentBgColor = 'teal';
-        let colorPaletteVisible = false;
-        
-        const bgColorPalettes = {
-            teal: {
-                primary: '#008080',
-                secondary: '#006666', 
-                deep: '#004444'
-            },
-            neon: {
-                primary: '#FF00FF',
-                secondary: '#C71585',
-                deep: '#8B008B'
-            },
-            cyber: {
-                primary: '#00FFFF',
-                secondary: '#1E90FF',
-                deep: '#0000CD'
-            },
-            matrix: {
-                primary: '#00FF41',
-                secondary: '#00CC33',
-                deep: '#008000'
-            },
-            electric: {
-                primary: '#FFFF00',
-                secondary: '#FFD700',
-                deep: '#FFA500'
-            },
-            synthwave: {
-                primary: '#FF1493',
-                secondary: '#9400D3',
-                deep: '#4B0082'
-            },
-            toxic: {
-                primary: '#ADFF2F',
-                secondary: '#32CD32',
-                deep: '#228B22'
-            },
-            hotpink: {
-                primary: '#FF69B4',
-                secondary: '#FF1493',
-                deep: '#DC143C'
-            }
-        };
-        
-        function toggleColorPalette() {
-            const palette = document.getElementById('colorPalette');
-            const btn = document.getElementById('bgToggleBtn');
-            
-            colorPaletteVisible = !colorPaletteVisible;
-            palette.style.display = colorPaletteVisible ? 'grid' : 'none';
-            btn.textContent = colorPaletteVisible ? '🎨 Hide Colors' : '🎨 Toggle Colors';
-        }
-        
-        function changeBackgroundColor(colorKey) {
-            const colors = bgColorPalettes[colorKey];
-            if (!colors) return;
-            
-            // Update CSS variables
-            const root = document.documentElement;
-            root.style.setProperty('--teal', colors.primary);
-            root.style.setProperty('--deep', colors.deep);
-            
-            // Update desktop background
-            const desktop = document.querySelector('.desktop');
-            desktop.style.background = `
-                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, .1) 1px, transparent 1px),
-                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, .1) 1px, transparent 1px),
-                linear-gradient(45deg, ${colors.primary} 0%, ${colors.secondary} 50%, ${colors.deep} 100%)`;
-            
-            // Update active color indicator
-            document.querySelectorAll('.color-option').forEach(option => {
-                option.classList.remove('active');
-            });
-            document.querySelector(`[data-bg="${colorKey}"]`).classList.add('active');
-            
-            currentBgColor = colorKey;
-            
-            // Save preference
-            localStorage.setItem('dd_bg_color', colorKey);
-            
-            // Update status
-            document.getElementById('status').textContent = `Background changed to ${colorKey}`;
-            setTimeout(() => {
-                const currentStatus = document.getElementById('status').textContent;
-                if (currentStatus === `Background changed to ${colorKey}`) {
-                    document.getElementById('status').textContent = mediaItems.length > 0 
-                        ? `${mediaItems.length} items ready.` 
-                        : 'Add files or press Demo.';
-                }
-            }, 2000);
-        }
-        
-        function loadBackgroundPreference() {
-            const saved = localStorage.getItem('dd_bg_color');
-            if (saved && bgColorPalettes[saved]) {
-                changeBackgroundColor(saved);
-            }
-        }
-
         /* ---------- Wire up ---------- */
         document.getElementById('addBtn').onclick = () => document.getElementById('filePicker').click();
         document.getElementById('filePicker').onchange = (e) => addFiles(e.target.files);
         document.getElementById('audioBtn').onclick = () => document.getElementById('audioPicker').click();
         document.getElementById('audioPicker').onchange = (e) => addAudioFiles(e.target.files);
         document.getElementById('clearAudio').onclick = clearAudio;
+        document.getElementById('pdfBtn').onclick = () => document.getElementById('pdfPicker').click();
+        document.getElementById('pdfPicker').onchange = (e) => addPdfFiles(e.target.files);
+        document.getElementById('clearPdf').onclick = clearPdf;
         document.getElementById('demoBtn').onclick = loadDemo;
         document.getElementById('textBtn').onclick = toggleTextWindow;
-        document.getElementById('bgToggleBtn').onclick = toggleColorPalette;
         document.getElementById('startBtn').onclick = () => {
             systemSounds.start(); // Play start sound
             start();
         };
         document.getElementById('resetBtn').onclick = reset;
         document.getElementById('recBtn').onclick = toggleRecording;
-        
-        // Color palette click handlers
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('color-option')) {
-                const bgColor = e.target.getAttribute('data-bg');
-                changeBackgroundColor(bgColor);
-            }
-        });
 
         document.getElementById('speed').oninput = (e) => {
             document.getElementById('speedVal').textContent = parseFloat(e.target.value).toFixed(1);
@@ -1840,7 +2064,6 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             initializeResizablePanels();
             initTextFeatures();
             loadLocal();
-            loadBackgroundPreference();
             renderPlaylist();
         });
 
