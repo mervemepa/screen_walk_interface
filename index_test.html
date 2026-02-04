@@ -572,6 +572,87 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             line-height: 1.5;
         }
 
+        /* Help/Instructions Window */
+        .help-window {
+            position: absolute;
+            background: #c0c0c0;
+            border: 2px outset #c0c0c0;
+            width: 500px;
+            height: 600px;
+            box-shadow: 4px 4px 8px var(--shadow);
+            z-index: 200;
+            resize: both;
+            overflow: hidden;
+        }
+
+        .help-window .window-titlebar {
+            background: linear-gradient(to right, var(--title1) 0%, var(--title2) 100%);
+            height: 18px;
+            display: flex;
+            align-items: center;
+            padding: 2px 4px;
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: move;
+        }
+
+        .help-window .help-content {
+            padding: 12px;
+            background: #fff;
+            border: 1px inset #c0c0c0;
+            margin: 4px;
+            height: calc(100% - 34px);
+            overflow-y: auto;
+            font-family: 'MS Sans Serif', sans-serif;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .help-window h2 {
+            color: #000080;
+            font-size: 14px;
+            margin: 12px 0 8px 0;
+            border-bottom: 1px solid #c0c0c0;
+            padding-bottom: 4px;
+        }
+
+        .help-window h3 {
+            color: #000080;
+            font-size: 12px;
+            margin: 10px 0 6px 0;
+        }
+
+        .help-window p {
+            margin: 6px 0;
+        }
+
+        .help-window ul {
+            margin: 6px 0;
+            padding-left: 20px;
+        }
+
+        .help-window li {
+            margin: 4px 0;
+        }
+
+        .help-window .shortcut {
+            background: #e0e0e0;
+            border: 1px solid #a0a0a0;
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+        }
+
+        .help-window .note {
+            background: #ffffcc;
+            border: 1px solid #ffdd88;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 2px;
+        }
+
         /* Text button in controls */
         .btn.text-btn {
             background: linear-gradient(to bottom, #f0f0f0 0%, #e0e0e0 100%);
@@ -697,7 +778,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             border-bottom: 1px inset #c0c0c0;
             padding: 4px;
             display: flex;
-            gap: 8px;
+            gap: 4px;
             align-items: center;
             height: 28px;
         }
@@ -708,21 +789,12 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             align-items: center;
         }
 
-        .pdf-window .fit-controls {
-            display: flex;
-            gap: 2px;
-            align-items: center;
-            margin-left: 8px;
-            padding-left: 8px;
-            border-left: 1px solid #808080;
-        }
-
-        .pdf-window .zoom-btn, .pdf-window .fit-btn {
+        .pdf-window .zoom-btn {
             background: linear-gradient(to bottom, #c0c0c0 0%, #a0a0a0 100%);
             border: 1px outset #c0c0c0;
+            width: 24px;
             height: 20px;
-            padding: 0 6px;
-            font-size: 10px;
+            font-size: 12px;
             font-weight: bold;
             display: flex;
             align-items: center;
@@ -730,7 +802,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             cursor: pointer;
         }
 
-        .pdf-window .zoom-btn:active, .pdf-window .fit-btn:active {
+        .pdf-window .zoom-btn:active {
             border: 1px inset #c0c0c0;
         }
 
@@ -743,20 +815,49 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         }
 
         .pdf-window .pdf-content {
-            background: #f0f0f0;
+            padding: 0;
+            background: #c0c0c0;
             height: calc(100% - 46px);
-            overflow: auto;
+            overflow: hidden;
             border: 1px inset #c0c0c0;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 20px;
+            position: relative;
         }
 
         .pdf-window .pdf-container {
-            background: #fff;
-            box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
-            border: 1px solid #ccc;
+            transform-origin: top left;
+            transition: transform 0.2s ease;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+
+        .pdf-window .pdf-container.dragging {
+            cursor: grabbing;
+            transition: none;
+        }
+
+        .pdf-window .pdf-container.zoomed {
+            cursor: grab;
+        }
+
+        .pdf-window .drag-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            cursor: grab;
+            display: none;
+        }
+
+        .pdf-window .drag-overlay.active {
+            display: block;
+            cursor: grab;
+        }
+
+        .pdf-window .drag-overlay.dragging {
+            cursor: grabbing;
         }
 
         .pdf-window iframe {
@@ -764,7 +865,6 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             height: 100%;
             border: none;
             background: #fff;
-            display: block;
         }
 
         /* Custom Windows 95 Cursor */
@@ -804,6 +904,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             <button class="btn" id="addBtn">📥 Upload Media</button>
             <button class="btn" id="demoBtn" title="Loads 5 sample images">✨ Demo</button>
             <button class="btn text-btn" id="textBtn" title="Open text box for performance">📝 Text</button>
+            <button class="btn" id="helpBtn" title="Show instructions">❓ Help</button>
             <input type="file" id="filePicker" accept="image/*,video/*" multiple hidden />
         </div>
 
@@ -1593,21 +1694,18 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                 <div class="pdf-toolbar">
                     <div class="zoom-controls">
                         <button class="zoom-btn" id="zoomOut" title="Zoom Out">-</button>
-                        <span class="zoom-level" id="zoomLevel">Fit Width</span>
+                        <span class="zoom-level" id="zoomLevel">100%</span>
                         <button class="zoom-btn" id="zoomIn" title="Zoom In">+</button>
-                    </div>
-                    <div class="fit-controls">
-                        <button class="fit-btn" id="fitWidth" title="Fit to Width">Fit Width</button>
-                        <button class="fit-btn" id="fitPage" title="Fit Page">Fit Page</button>
-                        <button class="fit-btn" id="actualSize" title="Actual Size">100%</button>
+                        <button class="zoom-btn" id="zoomReset" title="Reset Zoom" style="width: 40px; margin-left: 8px;">1:1</button>
                     </div>
                 </div>
-                <div class="pdf-content" id="pdfContent">
+                <div class="pdf-content">
                     <div class="pdf-container" id="pdfContainer">
                         <iframe src="${currentPdf.url}" type="application/pdf">
                             <p>Your browser does not support PDF viewing. <a href="${currentPdf.url}" target="_blank">Download PDF</a></p>
                         </iframe>
                     </div>
+                    <div class="drag-overlay" id="dragOverlay"></div>
                 </div>
             `;
             
@@ -1635,98 +1733,179 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         }
         
         function initializePdfZoom(pdfWindow) {
-            let currentMode = 'fitWidth';
-            const zoomLevels = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 3.0];
-            let currentZoomIndex = 2; // Start at 100%
+            let currentZoom = 1.0;
+            let translateX = 0;
+            let translateY = 0;
+            const minZoom = 0.25;
+            const maxZoom = 3.0;
+            const zoomStep = 0.25;
+            
+            // Dragging state
+            let isDragging = false;
+            let startX = 0;
+            let startY = 0;
+            let startTranslateX = 0;
+            let startTranslateY = 0;
             
             const pdfContainer = pdfWindow.querySelector('#pdfContainer');
-            const pdfContent = pdfWindow.querySelector('#pdfContent');
+            const pdfContent = pdfWindow.querySelector('.pdf-content');
+            const dragOverlay = pdfWindow.querySelector('#dragOverlay');
             const zoomLevel = pdfWindow.querySelector('#zoomLevel');
             const zoomInBtn = pdfWindow.querySelector('#zoomIn');
             const zoomOutBtn = pdfWindow.querySelector('#zoomOut');
-            const fitWidthBtn = pdfWindow.querySelector('#fitWidth');
-            const fitPageBtn = pdfWindow.querySelector('#fitPage');
-            const actualSizeBtn = pdfWindow.querySelector('#actualSize');
+            const zoomResetBtn = pdfWindow.querySelector('#zoomReset');
             
-            function updatePdfDisplay() {
-                if (currentMode === 'fitWidth') {
-                    pdfContainer.style.width = '100%';
-                    pdfContainer.style.height = 'auto';
-                    zoomLevel.textContent = 'Fit Width';
-                } else if (currentMode === 'fitPage') {
-                    pdfContainer.style.width = 'auto';
-                    pdfContainer.style.height = '100%';
-                    zoomLevel.textContent = 'Fit Page';
-                } else {
-                    // Fixed zoom level
-                    const zoom = zoomLevels[currentZoomIndex];
-                    pdfContainer.style.width = (zoom * 600) + 'px';
-                    pdfContainer.style.height = (zoom * 800) + 'px';
-                    zoomLevel.textContent = Math.round(zoom * 100) + '%';
-                }
+            function updateTransform() {
+                pdfContainer.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentZoom})`;
+                zoomLevel.textContent = `${Math.round(currentZoom * 100)}%`;
                 
                 // Update button states
-                zoomInBtn.disabled = (currentMode === 'zoom' && currentZoomIndex >= zoomLevels.length - 1);
-                zoomOutBtn.disabled = (currentMode === 'zoom' && currentZoomIndex <= 0);
+                zoomInBtn.disabled = currentZoom >= maxZoom;
+                zoomOutBtn.disabled = currentZoom <= minZoom;
                 
-                // Update button appearance
+                // Show/hide drag overlay based on zoom
+                if (currentZoom > 1.0) {
+                    dragOverlay.classList.add('active');
+                } else {
+                    dragOverlay.classList.remove('active');
+                    dragOverlay.classList.remove('dragging');
+                }
+                
+                // Update button appearance when disabled
                 if (zoomInBtn.disabled) {
                     zoomInBtn.style.opacity = '0.5';
+                    zoomInBtn.style.cursor = 'default';
                 } else {
                     zoomInBtn.style.opacity = '1';
+                    zoomInBtn.style.cursor = 'pointer';
                 }
                 
                 if (zoomOutBtn.disabled) {
                     zoomOutBtn.style.opacity = '0.5';
+                    zoomOutBtn.style.cursor = 'default';
                 } else {
                     zoomOutBtn.style.opacity = '1';
+                    zoomOutBtn.style.cursor = 'pointer';
                 }
             }
             
-            // Zoom In
+            function zoomAt(newZoom, clientX, clientY) {
+                const rect = pdfContent.getBoundingClientRect();
+                const x = clientX - rect.left;
+                const y = clientY - rect.top;
+                
+                // Calculate the zoom center point
+                const zoomCenterX = (x - translateX) / currentZoom;
+                const zoomCenterY = (y - translateY) / currentZoom;
+                
+                // Update zoom
+                const oldZoom = currentZoom;
+                currentZoom = Math.max(minZoom, Math.min(maxZoom, newZoom));
+                
+                // Calculate new translation to keep the zoom point centered
+                translateX = x - zoomCenterX * currentZoom;
+                translateY = y - zoomCenterY * currentZoom;
+                
+                // Constrain translation to keep content visible
+                constrainTranslation();
+                
+                updateTransform();
+            }
+            
+            function constrainTranslation() {
+                if (currentZoom <= 1.0) {
+                    translateX = 0;
+                    translateY = 0;
+                    return;
+                }
+                
+                const rect = pdfContent.getBoundingClientRect();
+                const containerWidth = rect.width * currentZoom;
+                const containerHeight = rect.height * currentZoom;
+                
+                // Constrain horizontal translation
+                const maxTranslateX = 0;
+                const minTranslateX = rect.width - containerWidth;
+                translateX = Math.max(minTranslateX, Math.min(maxTranslateX, translateX));
+                
+                // Constrain vertical translation
+                const maxTranslateY = 0;
+                const minTranslateY = rect.height - containerHeight;
+                translateY = Math.max(minTranslateY, Math.min(maxTranslateY, translateY));
+            }
+            
+            // Zoom in button
             zoomInBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (currentMode !== 'zoom') {
-                    currentMode = 'zoom';
-                    currentZoomIndex = 3; // 125%
-                } else if (currentZoomIndex < zoomLevels.length - 1) {
-                    currentZoomIndex++;
-                }
-                updatePdfDisplay();
+                const rect = pdfContent.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                zoomAt(currentZoom + zoomStep, centerX, centerY);
             });
             
-            // Zoom Out
+            // Zoom out button
             zoomOutBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (currentMode !== 'zoom') {
-                    currentMode = 'zoom';
-                    currentZoomIndex = 1; // 75%
-                } else if (currentZoomIndex > 0) {
-                    currentZoomIndex--;
+                const rect = pdfContent.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                zoomAt(currentZoom - zoomStep, centerX, centerY);
+            });
+            
+            // Reset zoom
+            zoomResetBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentZoom = 1.0;
+                translateX = 0;
+                translateY = 0;
+                updateTransform();
+            });
+            
+            // Mouse drag functionality
+            dragOverlay.addEventListener('mousedown', (e) => {
+                if (currentZoom > 1.0 && e.button === 0) { // Left mouse button
+                    isDragging = true;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    startTranslateX = translateX;
+                    startTranslateY = translateY;
+                    
+                    dragOverlay.classList.add('dragging');
+                    pdfContainer.style.transition = 'none';
+                    
+                    // Prevent text selection during drag
+                    document.body.style.userSelect = 'none';
+                    
+                    e.preventDefault();
+                    e.stopPropagation();
                 }
-                updatePdfDisplay();
             });
             
-            // Fit Width
-            fitWidthBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                currentMode = 'fitWidth';
-                updatePdfDisplay();
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    const deltaX = e.clientX - startX;
+                    const deltaY = e.clientY - startY;
+                    
+                    translateX = startTranslateX + deltaX;
+                    translateY = startTranslateY + deltaY;
+                    
+                    constrainTranslation();
+                    updateTransform();
+                    
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
             });
             
-            // Fit Page
-            fitPageBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                currentMode = 'fitPage';
-                updatePdfDisplay();
-            });
-            
-            // Actual Size (100%)
-            actualSizeBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                currentMode = 'zoom';
-                currentZoomIndex = 2; // 100%
-                updatePdfDisplay();
+            document.addEventListener('mouseup', (e) => {
+                if (isDragging) {
+                    isDragging = false;
+                    dragOverlay.classList.remove('dragging');
+                    pdfContainer.style.transition = 'transform 0.2s ease';
+                    
+                    // Re-enable text selection
+                    document.body.style.userSelect = '';
+                }
             });
             
             // Keyboard shortcuts
@@ -1734,14 +1913,32 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                 if (e.ctrlKey || e.metaKey) {
                     if (e.key === '+' || e.key === '=') {
                         e.preventDefault();
-                        zoomInBtn.click();
+                        const rect = pdfContent.getBoundingClientRect();
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+                        zoomAt(currentZoom + zoomStep, centerX, centerY);
                     } else if (e.key === '-') {
                         e.preventDefault();
-                        zoomOutBtn.click();
+                        const rect = pdfContent.getBoundingClientRect();
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+                        zoomAt(currentZoom - zoomStep, centerX, centerY);
                     } else if (e.key === '0') {
                         e.preventDefault();
-                        actualSizeBtn.click();
+                        currentZoom = 1.0;
+                        translateX = 0;
+                        translateY = 0;
+                        updateTransform();
                     }
+                }
+            });
+            
+            // Mouse wheel zoom at cursor position
+            pdfContent.addEventListener('wheel', (e) => {
+                if (e.ctrlKey || e.metaKey) {
+                    e.preventDefault();
+                    const delta = e.deltaY > 0 ? -zoomStep : zoomStep;
+                    zoomAt(currentZoom + delta, e.clientX, e.clientY);
                 }
             });
             
@@ -1749,8 +1946,8 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             pdfWindow.setAttribute('tabindex', '0');
             pdfWindow.focus();
             
-            // Initialize with fit width
-            updatePdfDisplay();
+            // Initialize
+            updateTransform();
         }
         
         function closePdfWindow() {
@@ -1916,6 +2113,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         document.getElementById('clearPdf').onclick = clearPdf;
         document.getElementById('demoBtn').onclick = loadDemo;
         document.getElementById('textBtn').onclick = toggleTextWindow;
+        document.getElementById('helpBtn').onclick = toggleHelpWindow;
         document.getElementById('startBtn').onclick = () => {
             systemSounds.start(); // Play start sound
             start();
@@ -2070,6 +2268,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
         /* ---------- Text Performance Window ---------- */
         let textWindow = null;
         let isTextWindowOpen = false;
+        
+        /* ---------- Help Window ---------- */
+        let helpWindow = null;
+        let isHelpWindowOpen = false;
 
         function toggleTextWindow() {
             const btn = document.getElementById('textBtn');
@@ -2078,6 +2280,14 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
                 closeTextWindow();
             } else {
                 openTextWindow();
+            }
+        }
+        
+        function toggleHelpWindow() {
+            if (isHelpWindowOpen) {
+                closeHelpWindow();
+            } else {
+                openHelpWindow();
             }
         }
 
@@ -2162,6 +2372,159 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/
             btn.textContent = '📝 Text';
 
             document.getElementById('status').textContent = 'Metin performans penceresi kapatıldı.';
+        }
+        
+        function openHelpWindow() {
+            if (helpWindow) return; // Already open
+
+            const desktop = document.getElementById('desktop');
+            helpWindow = document.createElement('div');
+            helpWindow.className = 'help-window';
+            helpWindow.id = 'helpWindowElement';
+
+            // Position in center
+            const x = Math.max(50, (window.innerWidth - 500) / 2);
+            const y = Math.max(50, (window.innerHeight - 600) / 2);
+            
+            helpWindow.style.left = px(x);
+            helpWindow.style.top = px(y);
+            helpWindow.style.zIndex = 201;
+
+            helpWindow.innerHTML = `
+                <div class="window-titlebar">
+                    <div class="window-title">❓ Desktop Documentary - Help & Instructions</div>
+                    <div class="window-controls">
+                        <div class="window-control" data-act="min">_</div>
+                        <div class="window-control" data-act="close">×</div>
+                    </div>
+                </div>
+                <div class="help-content">
+                    <h2>📖 Welcome to Desktop Documentary</h2>
+                    <p>Desktop Documentary is a creative tool for creating visual performances with images, videos, PDFs, audio, and live text. Windows appear randomly on your desktop in a chaotic, artistic layout.</p>
+                    
+                    <h2>🎬 Getting Started</h2>
+                    <h3>1. Add Media Files</h3>
+                    <ul>
+                        <li><strong>📥 Upload Media:</strong> Click to add images and videos</li>
+                        <li><strong>✨ Demo:</strong> Load 5 sample images to try it out</li>
+                        <li><strong>Drag & Drop:</strong> Drag files directly onto the desktop</li>
+                    </ul>
+                    
+                    <h3>2. Configure Playback</h3>
+                    <ul>
+                        <li><strong>Duration:</strong> Set how long each window stays open (1-8 seconds)</li>
+                        <li><strong>Max Windows:</strong> Control how many windows can be open at once (3-20)</li>
+                        <li><strong>Random Seed:</strong> Optional - use same number for repeatable layouts</li>
+                    </ul>
+                    
+                    <h3>3. Start Performance</h3>
+                    <ul>
+                        <li><strong>▶ Start:</strong> Begin the visual performance (loops continuously)</li>
+                        <li><strong>🔄 Reset:</strong> Close all windows and stop</li>
+                        <li><strong>⏺ Record:</strong> Capture your screen (requires screen sharing permission)</li>
+                    </ul>
+                    
+                    <h2>🎵 Additional Features</h2>
+                    
+                    <h3>Background Audio</h3>
+                    <ul>
+                        <li>Upload audio files to play during your performance</li>
+                        <li>Audio loops automatically</li>
+                        <li>Click × to clear audio</li>
+                    </ul>
+                    
+                    <h3>PDF Viewer</h3>
+                    <ul>
+                        <li>Upload PDF documents to view alongside your performance</li>
+                        <li><strong>Zoom:</strong> Use + and - buttons, or <span class="shortcut">Ctrl + scroll wheel</span></li>
+                        <li><strong>Pan:</strong> When zoomed in, click and drag to move around</li>
+                        <li><strong>Reset:</strong> Click "1:1" button or press <span class="shortcut">Ctrl+0</span></li>
+                    </ul>
+                    
+                    <h3>Live Text Performance</h3>
+                    <ul>
+                        <li><strong>📝 Text:</strong> Open a notepad for live typing during recording</li>
+                        <li>Type thoughts, poetry, or annotations in real-time</li>
+                        <li>Window can be moved and resized</li>
+                    </ul>
+                    
+                    <h2>⌨️ Keyboard Shortcuts</h2>
+                    <ul>
+                        <li><span class="shortcut">Ctrl+T</span> - Toggle text window</li>
+                        <li><span class="shortcut">Ctrl + +</span> - Zoom in (PDF)</li>
+                        <li><span class="shortcut">Ctrl + -</span> - Zoom out (PDF)</li>
+                        <li><span class="shortcut">Ctrl + 0</span> - Reset zoom (PDF)</li>
+                    </ul>
+                    
+                    <h2>🎨 Playlist Management</h2>
+                    <ul>
+                        <li><strong>Reorder:</strong> Drag items using the ⋮⋮ handle</li>
+                        <li><strong>Delete:</strong> Click 🗑 to remove individual items</li>
+                        <li><strong>Resize:</strong> Drag the bottom-right corner of the playlist</li>
+                    </ul>
+                    
+                    <h2>💡 Tips & Tricks</h2>
+                    <div class="note">
+                        <strong>Recording Tips:</strong>
+                        <ul>
+                            <li>Use Chrome browser for best recording results</li>
+                            <li>Recording saves as WEBM - convert to MP4 with ffmpeg if needed</li>
+                            <li>Start recording before clicking "▶ Start" for complete capture</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="note">
+                        <strong>Performance Tips:</strong>
+                        <ul>
+                            <li>Combine images, PDFs, and live text for rich performances</li>
+                            <li>Add background audio to create atmosphere</li>
+                            <li>Experiment with different durations and max windows settings</li>
+                            <li>Windows loop continuously - perfect for installations</li>
+                        </ul>
+                    </div>
+                    
+                    <h2>📝 About</h2>
+                    <p>Desktop Documentary © 2025 Merve Mepa</p>
+                    <p>Licensed under CC BY-NC-ND 4.0 International</p>
+                </div>
+            `;
+
+            desktop.appendChild(helpWindow);
+
+            // Make draggable
+            const titlebar = helpWindow.querySelector('.window-titlebar');
+            makeDraggable(helpWindow, titlebar);
+
+            // Window controls
+            helpWindow.querySelector('.window-controls').addEventListener('click', (e) => {
+                const act = e.target.getAttribute('data-act');
+                if (act === 'close') {
+                    closeHelpWindow();
+                }
+                if (act === 'min') {
+                    helpWindow.style.opacity = helpWindow.style.opacity === '0.3' ? '1' : '0.3';
+                }
+            });
+
+            isHelpWindowOpen = true;
+            document.getElementById('status').textContent = 'Help window opened.';
+        }
+        
+        function closeHelpWindow() {
+            if (helpWindow) {
+                helpWindow.style.transform = 'scale(0.8)';
+                helpWindow.style.opacity = '0';
+                
+                setTimeout(() => {
+                    if (helpWindow) {
+                        helpWindow.remove();
+                        helpWindow = null;
+                    }
+                }, 200);
+            }
+
+            isHelpWindowOpen = false;
+            document.getElementById('status').textContent = 'Help window closed.';
         }
 
         /* ---------- Enhanced Text Features ---------- */
